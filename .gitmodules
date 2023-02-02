@@ -1,0 +1,3 @@
+[submodule "Dependencies/SyriusCore"]
+	path = Dependencies/SyriusCore
+	url = https://github.com/SyriusEngine/SyriusCore
