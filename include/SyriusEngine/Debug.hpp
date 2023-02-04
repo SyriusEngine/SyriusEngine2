@@ -69,18 +69,18 @@ namespace Syrius{
 }
 
 #define SR_MESSAGE_INFO(message, source, ...) \
-    Syrius::MessageHandler::pushInfo(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_INFO, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
+    Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_INFO, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
 
 #define SR_MESSAGE_WARNING(message, source, ...) \
-    Syrius::MessageHandler::pushInfo(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_MEIDUM, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
+    Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_MEIDUM, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
 
 #define SR_MESSAGE_EXCEPTION(message, source, ...) \
-    Syrius::MessageHandler::pushInfo(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_HIGH, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
+    Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_HIGH, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
 
 #define SR_PRECONDITION(condition, message, source, ...) \
-    if (!condition){Syrius::MessageHandler::pushInfo(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_PRECONDITION, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);}
+    if (!condition){Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_PRECONDITION, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);}
 
 #define SR_POSTCONDITION(condition, message, source, ...) \
-    if (!condition){Syrius::MessageHandler::pushInfo(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_POSTCONDITION, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);}
+    if (!condition){Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_CORE_MESSAGE_SEVERITY::SR_MESSAGE_POSTCONDITION, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);}
 
 

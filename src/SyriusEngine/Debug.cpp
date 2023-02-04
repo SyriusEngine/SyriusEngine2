@@ -1,4 +1,4 @@
-#include "../include/Debug.hpp"
+#include "../../include/SyriusEngine/Debug.hpp"
 
 namespace Syrius{
 

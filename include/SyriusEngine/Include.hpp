@@ -1,11 +1,11 @@
 #pragma once
 
-#include <SyriusCore/SyriusCore.hpp>
+#include "SyriusCore/SyriusCore.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
-#include <glm.hpp>
-#include <ext.hpp>
-#include <gtx/quaternion.hpp>
+#include "glm.hpp"
+#include "ext.hpp"
+#include "gtx/quaternion.hpp"
 
 #include <memory>
 #include <unordered_map>
