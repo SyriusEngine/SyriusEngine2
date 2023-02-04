@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <functional>
 
+#include "PlatformDetection.hpp"
+
 namespace Syrius{
 
     typedef uint64 UID;
