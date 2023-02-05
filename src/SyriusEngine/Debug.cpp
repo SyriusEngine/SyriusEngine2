@@ -9,11 +9,15 @@ namespace Syrius{
         message += "Message = " + msg.message + "\n";
         std::cerr << message;
         std::cerr << "\n\n--------------------------------------------------------------------------------\n";
+
+        if (msg.severity == SR_MESSAGE_SEVERITY_HIGH and msg.source != SR_MESSAGE_SYRIUS_CORE){
+            throw std::runtime_error(msg.message);
+        }
     }
 
     std::string SR_API messageSourceToString(SR_MESSAGE_SOURCE source){
         switch (source) {
-            case SR_MESSAGE:                return "MESSAGE";
+            case SR_MESSAGE_GENERAL:        return "GENERAL";
             case SR_MESSAGE_SYRIUS_CORE:    return "SYRIUS_CORE";
             case SR_MESSAGE_RENDERER:       return "RENDERER";
             case SR_MESSAGE_ECS:            return "ECS";

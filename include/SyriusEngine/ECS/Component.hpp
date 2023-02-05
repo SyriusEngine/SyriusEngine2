@@ -6,7 +6,6 @@
 
 namespace Syrius{
 
-
     template<typename ComponentType>
     class SR_API Component{
     public:
