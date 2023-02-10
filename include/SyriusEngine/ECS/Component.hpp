@@ -12,8 +12,6 @@ namespace Syrius{
         virtual ~Component() = default;
 
         static ComponentID getID(){
-            std::lock_guard<std::mutex> lock(m_genIDMutex);
-
             auto it = m_IDMap.find(typeid(ComponentType));
             if (it != m_IDMap.end()){
                 return it->second;
@@ -26,10 +24,11 @@ namespace Syrius{
         }
 
     private:
-        static std::mutex m_genIDMutex;
         static std::unordered_map<std::type_index, ComponentID> m_IDMap;
 
-
     };
+
+    template<typename ComponentType>
+    std::unordered_map<std::type_index, ComponentID> Component<ComponentType>::m_IDMap;
 
 }

@@ -44,17 +44,37 @@ namespace Syrius{
 
         template<typename C>
         C& getComponent(EntityID eid){
+            std::lock_guard<std::mutex> lock(m_Mutex);
+
             auto cID = Component<C>::getID();
             auto componentOffset = m_Entities[eid][cID];
-            return m_ComponentMap[cID][componentOffset];
+            return std::any_cast<C&>(m_ComponentMap[cID][componentOffset]);
+        }
+
+        template<typename C>
+        void removeComponent(EntityID eid){
+            std::lock_guard<std::mutex> lock(m_Mutex);
+
+            auto cID = Component<C>::getID();
+            auto& data = m_ComponentMap[cID];
+            auto componentIndex = m_Entities[eid][cID];
+            if (componentIndex != data.size() - 1) {
+                // Swap the component with the last one, so we don't have to erase
+                // the entire vector, which is an expensive operation
+                std::swap(data[componentIndex], data.back());
+            }
+            data.pop_back();
+            m_Entities[eid].erase(cID);
         }
 
         template<typename C>
         void runSystem(void(*componentFunc)(C&)){
+            std::lock_guard<std::mutex> lock(m_Mutex);
+
             auto cID = Component<C>::getID();
             auto& data = m_ComponentMap[cID];
             for (auto& comp: data){
-                componentFunc(comp);
+                componentFunc(*std::any_cast<C>(&comp));
             }
         }
 

@@ -58,7 +58,7 @@ namespace Syrius{
             msg.line = line;
             msg.message = std::string(reinterpret_cast<char*>(formatBuffer.data()));
 
-            m_Func(msg);
+//            m_Func(msg);
         }
 
 

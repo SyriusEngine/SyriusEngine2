@@ -15,13 +15,17 @@ set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp
         src/SyriusEngine/Renderer/RenderLayer.cpp)
 
+set(ECS_SRC
+        src/SyriusEngine/ECS/Component.cpp)
+
 set(SYRIUS_ENGINE_SRC
         ${RENDERER_SRC}
+        ${ECS_SRC}
         src/SyriusEngine/SyriusEngine.cpp
         src/SyriusEngine/Debug.cpp
         src/SyriusEngine/LayerStack.cpp
         src/SyriusEngine/Layer.cpp
-        src/SyriusEngine/SyriusEngineImpl.cpp include/SyriusEngine/ECS/Component.hpp)
+        src/SyriusEngine/SyriusEngineImpl.cpp  )
 
 add_library(SyriusEngine SHARED ${SYRIUS_ENGINE_SRC})
 
