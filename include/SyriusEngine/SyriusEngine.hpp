@@ -30,6 +30,8 @@ namespace Syrius{
 
         virtual void close() = 0;
 
+        [[nodiscard]] virtual const UP<RenderContext>& getRenderContext() const = 0;
+
         ResourceView<SyriusWindow> getInternalWindow();
 
     protected:

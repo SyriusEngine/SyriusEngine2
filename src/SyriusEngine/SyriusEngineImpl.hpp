@@ -2,6 +2,7 @@
 
 #include "../../include/SyriusEngine/SyriusEngine.hpp"
 #include "LayerStack.hpp"
+#include "Renderer/Renderer.hpp"
 
 namespace Syrius{
 
@@ -21,8 +22,11 @@ namespace Syrius{
 
         void close() override;
 
+        [[nodiscard]] const UP<RenderContext>& getRenderContext() const override;
+
     private:
         UP<LayerStack> m_LayerStack;
+        UP<Renderer> m_Renderer;
 
     };
 

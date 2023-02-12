@@ -24,7 +24,7 @@ namespace Syrius{
 
     protected:
 
-        friend class RenderCommand;
+        friend class Renderer;
 
         ResourceView<FrameBuffer>& onRender(ResourceView<FrameBuffer>& framebuffer);
 

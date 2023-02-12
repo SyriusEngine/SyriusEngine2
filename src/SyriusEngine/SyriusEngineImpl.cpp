@@ -5,6 +5,10 @@ namespace Syrius{
     SyriusEngineImpl::SyriusEngineImpl(const SyriusEngineDesc &desc) :
     SyriusEngine(desc),
     m_LayerStack(createUP<LayerStack>()){
+        RendererDesc rendererDesc;
+        rendererDesc.api = SR_API_D3D11;
+        rendererDesc.shaderLibraryPath = "./Resources/Shaders/";
+        m_Renderer = createUP<Renderer>(rendererDesc, m_LayerStack, m_Window);
 
     }
 
@@ -27,6 +31,8 @@ namespace Syrius{
             }
 
             m_LayerStack->onUpdate();
+
+            m_Renderer->render();
         }
 
     }
@@ -45,5 +51,9 @@ namespace Syrius{
 
     void SyriusEngineImpl::popLayer(uint32 popCount) {
         m_LayerStack->popLayer(popCount);
+    }
+
+    const UP<RenderContext> &SyriusEngineImpl::getRenderContext() const {
+        return m_Renderer->getRenderContext();
     }
 }

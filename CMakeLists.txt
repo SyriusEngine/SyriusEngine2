@@ -13,19 +13,21 @@ include_directories(./Dependencies/glm)
 
 set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp
-        src/SyriusEngine/Renderer/RenderLayer.cpp)
+        src/SyriusEngine/Renderer/RenderLayer.cpp
+        src/SyriusEngine/Renderer/Renderer.cpp src/SyriusEngine/Renderer/RenderContext.cpp src/SyriusEngine/Renderer/ShaderLibrary.cpp include/SyriusEngine/Renderer/ShaderLibrary.hpp)
 
-set(ECS_SRC
-        src/SyriusEngine/ECS/Component.cpp)
+set(UTILS_SRC
+        src/SyriusEngine/Utils/Worker.cpp)
 
 set(SYRIUS_ENGINE_SRC
         ${RENDERER_SRC}
-        ${ECS_SRC}
+        ${UTILS_SRC}
         src/SyriusEngine/SyriusEngine.cpp
         src/SyriusEngine/Debug.cpp
         src/SyriusEngine/LayerStack.cpp
         src/SyriusEngine/Layer.cpp
-        src/SyriusEngine/SyriusEngineImpl.cpp  )
+        src/SyriusEngine/SyriusEngineImpl.cpp
+        src/SyriusEngine/Utils/Worker.cpp)
 
 add_library(SyriusEngine SHARED ${SYRIUS_ENGINE_SRC})
 
