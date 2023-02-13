@@ -7,11 +7,20 @@ int main() {
 
     init();
     try{
-        SyriusEngineDesc desc;
+        ////// OPENGL
+        SyriusEngineDesc glDesc;
+        glDesc.renderAPI = SR_API_OPENGL;
+        glDesc.window.title = "SyriusEngine - OpenGL";
+        auto glEngine = createEngine(glDesc);
+        glEngine->run();
 
-        auto engine = createEngine(desc);
 
-        engine->run();
+        ////// D3D11
+        SyriusEngineDesc d3d11Desc;
+        d3d11Desc.renderAPI = SR_API_D3D11;
+        d3d11Desc.window.title = "SyriusEngine - D3D11";
+        auto d3d11Engine = createEngine(d3d11Desc);
+        d3d11Engine->run();
 
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;

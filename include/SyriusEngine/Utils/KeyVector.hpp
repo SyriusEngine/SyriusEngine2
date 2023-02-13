@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../Core/SyriusEngineInclude.hpp"
+#include "../Include.hpp"
+#include "../Debug.hpp"
 
 namespace Syrius{
 
@@ -13,7 +14,7 @@ namespace Syrius{
         ~KeyVector() = default;
 
         void insert(const K& key, const D& data){
-            SR_PRECONDITION(m_KeyIndexMap.find(key) == m_KeyIndexMap.end(), "[KeyVector]: Key already exists")
+            SR_PRECONDITION(m_KeyIndexMap.find(key) == m_KeyIndexMap.end(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "[KeyVector]: Key already exists")
 
             m_Data.push_back(data);
             m_KeyIndexMap.insert({key, m_Data.size() - 1});
@@ -21,38 +22,38 @@ namespace Syrius{
 
         template<typename... Args>
         void emplace(const K& key, Args&&... args){
-            SR_PRECONDITION(m_KeyIndexMap.find(key) == m_KeyIndexMap.end(), "[KeyVector]: Key already exists")
+            SR_PRECONDITION(m_KeyIndexMap.find(key) == m_KeyIndexMap.end(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "[KeyVector]: Key already exists")
 
             m_Data.emplace_back(std::forward<Args>(args)...);
             m_KeyIndexMap.insert({key, m_Data.size() - 1});
         }
 
         const D& get(const K& key) const {
-            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), "[KeyVector]: cannot retrieve element, key does not exists");
+            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "[KeyVector]: cannot retrieve element, key does not exists");
 
             return m_Data[m_KeyIndexMap[key]];
         }
 
         D& get(const K& key){
-            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), "[KeyVector]: cannot retrieve element, key does not exists");
+            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "[KeyVector]: cannot retrieve element, key does not exists");
 
             return m_Data[m_KeyIndexMap[key]];
         }
 
         const D& operator[](const K& key) const{
-            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), "[KeyVector]: cannot retrieve element, key does not exists");
+            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "[KeyVector]: cannot retrieve element, key does not exists");
 
             return m_Data[m_KeyIndexMap[key]];
         }
 
         D& operator[](const K& key){
-            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), "[KeyVector]: cannot retrieve element, key does not exists");
+            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "[KeyVector]: cannot retrieve element, key does not exists");
 
             return m_Data[m_KeyIndexMap[key]];
         }
 
         void remove(const K& key){
-            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), "[KeyVector]: cannot remove element, key does not exists");
+            SR_PRECONDITION(m_KeyIndexMap.find(key) != m_KeyIndexMap.end(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "[KeyVector]: cannot remove element, key does not exists");
 
             auto lastDataIndex = m_Data.size() - 1;
             auto currentDataIndex = m_KeyIndexMap[key];

@@ -14,7 +14,16 @@ include_directories(./Dependencies/glm)
 set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp
         src/SyriusEngine/Renderer/RenderLayer.cpp
-        src/SyriusEngine/Renderer/Renderer.cpp src/SyriusEngine/Renderer/RenderContext.cpp src/SyriusEngine/Renderer/ShaderLibrary.cpp include/SyriusEngine/Renderer/ShaderLibrary.hpp)
+        src/SyriusEngine/Renderer/Renderer.cpp
+        src/SyriusEngine/Renderer/RenderContext.cpp
+        src/SyriusEngine/Renderer/ShaderLibrary.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/PBRenderLayer.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/Pass.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/RenderPass.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/ResourcePass.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/CameraDataPass.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/ProjectionPass.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.hpp)
 
 set(UTILS_SRC
         src/SyriusEngine/Utils/Worker.cpp)

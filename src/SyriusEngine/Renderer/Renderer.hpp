@@ -3,6 +3,7 @@
 #include "../../../include/SyriusEngine/Renderer/Primitives.hpp"
 #include "../../../include/SyriusEngine/Utils/Worker.hpp"
 #include "../LayerStack.hpp"
+#include "PBRenderLayer/PBRenderLayer.hpp"
 
 namespace Syrius{
 
@@ -21,7 +22,6 @@ namespace Syrius{
 
         [[nodiscard]] const UP<RenderContext>& getRenderContext() const;
 
-
     private:
 
         void setup();
@@ -35,11 +35,13 @@ namespace Syrius{
         ResourceView<Context> m_Context;
 
         UP<RenderContext> m_RenderContext;
+        RCP<PBRenderLayer> m_PBRenderLayer;
 
         ResourceView<VertexArray> m_ScreenVAO;
         ResourceView<VertexBuffer> m_ScreenVBO;
         ResourceView<IndexBuffer> m_ScreenIBO;
         ResourceView<Shader> m_ScreenShader;
+        ResourceView<Sampler> m_Sampler;
 
     };
 

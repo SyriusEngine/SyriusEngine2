@@ -1,20 +1,16 @@
 #pragma once
 
 #include "Pass.hpp"
-#include "../ShaderLibrary.hpp"
+#include "../../../../include/SyriusEngine/Renderer/ShaderLibrary.hpp"
 
 namespace Syrius{
 
     class RenderPass : public Pass{
     public:
 
-        explicit RenderPass(ResourceView<Context>& context);
-
         RenderPass(ResourceView<Context>& context, const ResourceView<FrameBufferDescription>& fbDesc);
 
         ~RenderPass() override;
-
-        void bindColorAttachmentAsShaderResource(uint32 attachIndex, uint32 slot);
 
         void onResize(uint32 width, uint32 height);
 

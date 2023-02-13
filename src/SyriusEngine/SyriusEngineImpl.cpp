@@ -6,7 +6,7 @@ namespace Syrius{
     SyriusEngine(desc),
     m_LayerStack(createUP<LayerStack>()){
         RendererDesc rendererDesc;
-        rendererDesc.api = SR_API_D3D11;
+        rendererDesc.api = desc.renderAPI;
         rendererDesc.shaderLibraryPath = "./Resources/Shaders/";
         m_Renderer = createUP<Renderer>(rendererDesc, m_LayerStack, m_Window);
 

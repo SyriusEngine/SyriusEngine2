@@ -12,7 +12,7 @@ namespace Syrius{
 
     struct SR_API SyriusEngineDesc{
         WindowDesc window;
-        SR_SUPPORTED_API renderAPI;
+        SR_SUPPORTED_API renderAPI = SR_API_OPENGL;
         std::string shaderLibraryPath;
     };
 

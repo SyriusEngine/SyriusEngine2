@@ -1,0 +1,16 @@
+struct VS_OUT{
+    float4 position: SV_Position;
+    float3 cameraPos: CameraPos;
+    float2 texCoord: TexCoord;
+    matrix<float, 3, 3> TBN: TBNMatrix;
+};
+
+struct PS_OUT{
+    float4 fragColor: SV_TARGET0;
+};
+
+PS_OUT main(VS_OUT vsOutput){
+    PS_OUT output;
+    output.fragColor = float4(0.5f, 0.3f, 0.8f, 1.0f);
+    return output;
+}

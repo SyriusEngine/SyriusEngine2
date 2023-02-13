@@ -2,9 +2,6 @@
 
 namespace Syrius{
 
-    // TEST IMAGE
-    static ResourceView<Texture2D> testTexture;
-
     Renderer::Renderer(const RendererDesc &rendererDesc, UP<LayerStack>& layerStack, Resource<SyriusWindow>& window):
     m_LayerStack(layerStack),
     m_Window(window),
@@ -21,22 +18,82 @@ namespace Syrius{
             splrDesc.magFilter = SR_TEXTURE_FILTER_LINEAR;
             splrDesc.wrapU = SR_TEXTURE_WRAP_REPEAT;
             splrDesc.wrapV = SR_TEXTURE_WRAP_REPEAT;
-            auto defaultSampler = m_Context->createSampler(splrDesc);
+            m_Sampler = m_Context->createSampler(splrDesc);
 
-            m_RenderContext = createUP<RenderContext>(m_Context, m_Worker, defaultSampler, rendererDesc.shaderLibraryPath);
+            m_RenderContext = createUP<RenderContext>(m_Context, m_Worker, m_Sampler, rendererDesc.shaderLibraryPath);
             setup();
-
-            auto img = createImage("./Resources/Textures/awesomeface.png");
-            Texture2DImageDesc t2diDesc;
-            t2diDesc.image = img.createView();
-            t2diDesc.sampler = defaultSampler;
-            testTexture = m_Context->createTexture2D(t2diDesc);
-
         });
+
+        m_PBRenderLayer = createRCP<PBRenderLayer>(m_RenderContext);
+        m_LayerStack->pushRenderLayer(m_PBRenderLayer);
+
+        MeshDesc cube;
+        cube.vertices = {
+                /// front
+                {glm::vec3(0.0f, 0.0f, 0.0f),  glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+                {glm::vec3(1.0f, 0.0f, 0.0f),  glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+                {glm::vec3(1.0f, 0.0f, 1.0f),  glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+                {glm::vec3(0.0f, 0.0f, 1.0f),  glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+                /// left
+                {glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+                {glm::vec3(0.0f, 0.0f, 0.0f),  glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+                {glm::vec3(0.0f, 0.0f, 1.0f),  glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+                {glm::vec3(0.0f, 1.0f, 1.0f),  glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+                /// bottom
+                {glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+                {glm::vec3(1.0f, 1.0f, 0.0f),  glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+                {glm::vec3(1.0f, 0.0f, 0.0f),  glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+                {glm::vec3(0.0f, 0.0f, 0.0f),  glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+                /// back
+                {glm::vec3(1.0f, 1.0f, 0.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+                {glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+                {glm::vec3(0.0f, 1.0f, 1.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+                {glm::vec3(1.0f, 1.0f, 1.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+                /// right
+                {glm::vec3(1.0f, 0.0f, 0.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+                {glm::vec3(1.0f, 1.0f, 0.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+                {glm::vec3(1.0f, 1.0f, 1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+                {glm::vec3(1.0f, 0.0f, 1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+                /// top
+                {glm::vec3(0.0f, 0.0f, 1.0f),  glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+                {glm::vec3(1.0f, 0.0f, 1.0f),  glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
+                {glm::vec3(1.0f, 1.0f, 1.0f),  glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+                {glm::vec3(0.0f, 1.0f, 1.0f),  glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+        };
+        cube.indices = {
+                0, 3, 2,
+                0, 2, 1,
+
+                4, 7, 6,
+                4, 6, 5,
+
+                8, 11, 10,
+                8, 10, 9,
+
+                12, 15, 14,
+                12, 14, 13,
+
+                16, 19, 18,
+                16, 18, 17,
+
+                20, 23, 22,
+                20, 22, 21
+        };
+
+        auto mid = m_PBRenderLayer->createMesh(cube);
     }
 
     Renderer::~Renderer() {
+        m_LayerStack->popLayer();
         m_Worker.pushTaskSync([this]{
+            m_ScreenVAO.release();
+            m_ScreenVBO.release();
+            m_ScreenIBO.release();
+            m_ScreenShader.release();
+            m_Sampler.release();
+
+            m_RenderContext.reset();
+
             m_Window->destroyContext();
         });
         m_Worker.stop();
@@ -44,12 +101,13 @@ namespace Syrius{
 
     void Renderer::render() {
         m_Worker.pushTaskSync([this]{
+            m_Sampler->bind(0);
 
             auto defaultfbo = m_Context->getDefaultFrameBuffer();
             defaultfbo = m_LayerStack->onRender(defaultfbo);
 
             m_Context->beginRenderPass();
-            testTexture->bind(0); //TODO: replace with defaultfbo object
+            defaultfbo->getColorAttachment(0)->bindShaderResource(0);
             m_ScreenVAO->bind();
             m_ScreenShader->bind();
             m_Context->draw(m_ScreenVAO);
