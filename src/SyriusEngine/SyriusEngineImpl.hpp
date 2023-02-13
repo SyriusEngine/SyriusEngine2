@@ -24,6 +24,12 @@ namespace Syrius{
 
         [[nodiscard]] const UP<RenderContext>& getRenderContext() const override;
 
+        void addCameraComponent(EntityID, float sensitivity, float speed) override;
+
+        [[nodiscard]] CameraComponent& getCameraComponent(EntityID eid) override;
+
+        void removeCameraComponent(EntityID eid) override;
+
     private:
         UP<LayerStack> m_LayerStack;
         UP<Renderer> m_Renderer;

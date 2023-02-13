@@ -40,5 +40,5 @@ void main(){
     res.cameraPos = cameraPos.xyz;
     res.position = fragPos;
     res.TBN = TBN;
-    gl_Position = vec4(fragPos, 1.0);
+    gl_Position = perspective * view * vec4(fragPos, 1.0);
 }

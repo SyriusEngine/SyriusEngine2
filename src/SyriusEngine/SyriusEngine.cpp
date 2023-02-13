@@ -6,13 +6,19 @@ namespace Syrius{
     SyriusEngine::~SyriusEngine() = default;
 
     SyriusEngine::SyriusEngine(const SyriusEngineDesc &desc):
-    m_Window(createWindow(desc.window)){
+    m_Window(createWindow(desc.window)),
+    m_ECS(createUP<ECS>()){
 
+    }
+
+    EntityID SyriusEngine::createEntity() {
+        return m_ECS->createEntity();
     }
 
     ResourceView<SyriusWindow> SyriusEngine::getInternalWindow() {
         return m_Window.createView();
     }
+
 
     void init(){
         syriusCoreInit();

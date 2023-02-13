@@ -35,9 +35,7 @@ namespace Syrius{
                 m_ComponentMap.insert({cID, std::vector<std::any>()});
             }
             auto& data = m_ComponentMap[cID];
-            data.emplace_back(std::apply([](Args&&... args){
-                return C{std::forward<Args>(args)...};
-            }, std::make_tuple(std::forward<Args>(args)...)));
+            data.emplace_back(C{std::forward<Args>(args)...});
 
             m_Entities[eid].insert({cID, data.size() - 1});
         }

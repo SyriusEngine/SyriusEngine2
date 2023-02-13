@@ -25,6 +25,12 @@ namespace Syrius{
 
         MeshID createMesh(const MeshDesc& desc);
 
+        void setMeshTransformation(MeshID meshID, const glm::mat4& modelMatrix);
+
+        void removeMesh(MeshID meshID);
+
+        void setCameraData(const glm::mat4& view, const glm::vec3& cameraPosition);
+
     private:
         RCP<ProjectionPass> m_ProjectionPass;
         RCP<CameraDataPass> m_CameraDataPass;

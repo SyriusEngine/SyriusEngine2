@@ -7,6 +7,7 @@
 #include "Renderer/RenderLayer.hpp"
 
 #include "ECS/ECS.hpp"
+#include "ECS/CameraComponent.hpp"
 
 namespace Syrius{
 
@@ -31,6 +32,14 @@ namespace Syrius{
         virtual void close() = 0;
 
         [[nodiscard]] virtual const UP<RenderContext>& getRenderContext() const = 0;
+
+        virtual void addCameraComponent(EntityID, float sensitivity, float speed) = 0;
+
+        [[nodiscard]] virtual CameraComponent& getCameraComponent(EntityID eid) = 0;
+
+        virtual void removeCameraComponent(EntityID eid) = 0;
+
+        EntityID createEntity();
 
         ResourceView<SyriusWindow> getInternalWindow();
 

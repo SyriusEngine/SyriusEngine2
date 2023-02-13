@@ -10,6 +10,8 @@ add_compile_definitions(SR_EXPORT_DLL)
 include_directories(./Dependencies/SyriusCore/include)
 include_directories(./Dependencies/glm)
 
+set(ECS_SRC
+        src/SyriusEngine/ECS/CameraComponent.cpp)
 
 set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp
@@ -23,14 +25,15 @@ set(RENDERER_SRC
         src/SyriusEngine/Renderer/PBRenderLayer/ResourcePass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/CameraDataPass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/ProjectionPass.cpp
-        src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.hpp)
+        src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp )
 
 set(UTILS_SRC
-        src/SyriusEngine/Utils/Worker.cpp)
+        src/SyriusEngine/Utils/Worker.cpp src/SyriusEngine/ECS/CameraComponent.cpp)
 
 set(SYRIUS_ENGINE_SRC
         ${RENDERER_SRC}
         ${UTILS_SRC}
+        ${ECS_SRC}
         src/SyriusEngine/SyriusEngine.cpp
         src/SyriusEngine/Debug.cpp
         src/SyriusEngine/LayerStack.cpp
@@ -40,7 +43,7 @@ set(SYRIUS_ENGINE_SRC
 
 add_library(SyriusEngine SHARED ${SYRIUS_ENGINE_SRC})
 
-add_executable(SyriusEngineDev main.cpp)
+add_executable(SyriusEngineDev main.cpp ApplicationLayer.cpp ApplicationLayer.hpp)
 
 if (WIN32)
     link_directories(cmake-build-debug)

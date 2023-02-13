@@ -84,7 +84,7 @@ namespace Syrius{
     }
 
     Renderer::~Renderer() {
-        m_LayerStack->popLayer();
+        m_LayerStack.reset();
         m_Worker.pushTaskSync([this]{
             m_ScreenVAO.release();
             m_ScreenVBO.release();
@@ -148,6 +148,10 @@ namespace Syrius{
         vaoDesc.vertexBuffer = m_ScreenVBO;
         vaoDesc.vertexShader = package.vertexShader;
         m_ScreenVAO = m_Context->createVertexArray(vaoDesc);
+    }
+
+    RCP<PBRenderLayer> &Renderer::getPBRenderLayer() {
+        return m_PBRenderLayer;
     }
 
 }

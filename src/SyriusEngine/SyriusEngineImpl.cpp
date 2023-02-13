@@ -56,4 +56,17 @@ namespace Syrius{
     const UP<RenderContext> &SyriusEngineImpl::getRenderContext() const {
         return m_Renderer->getRenderContext();
     }
+
+    void SyriusEngineImpl::addCameraComponent(EntityID eid, float sensitivity, float speed) {
+        auto& renderLayer = m_Renderer->getPBRenderLayer();
+        m_ECS->addComponent<CameraComponent>(eid, sensitivity, speed, renderLayer);
+    }
+
+    CameraComponent &SyriusEngineImpl::getCameraComponent(EntityID eid) {
+        return m_ECS->getComponent<CameraComponent>(eid);
+    }
+
+    void SyriusEngineImpl::removeCameraComponent(EntityID eid) {
+        m_ECS->removeComponent<CameraComponent>(eid);
+    }
 }

@@ -45,6 +45,7 @@ namespace Syrius{
             auto newWidth = event.windowWidth;
             auto newHeight = event.windowHeight;
             m_RenderThread.pushTask([newWidth, newHeight, this]{
+                m_GeometryPass->onResize(newWidth, newHeight);
                 //// HANDLE RESIZE (framebuffers and projection)
             });
         }
@@ -62,5 +63,23 @@ namespace Syrius{
             meshID = m_GeometryPass->createMesh(desc);
         });
         return meshID;
+    }
+
+    void PBRenderLayer::setMeshTransformation(MeshID meshID, const glm::mat4& modelMatrix) {
+        m_RenderThread.pushTask([meshID, modelMatrix, this]{
+            m_GeometryPass->setMeshTransformation(meshID, modelMatrix);
+        });
+    }
+
+    void PBRenderLayer::removeMesh(MeshID meshID) {
+        m_RenderThread.pushTask([meshID, this]{
+            m_GeometryPass->removeMesh(meshID);
+        });
+    }
+
+    void PBRenderLayer::setCameraData(const glm::mat4 &view, const glm::vec3 &cameraPosition) {
+        m_RenderThread.pushTask([view, cameraPosition, this]{
+            m_CameraDataPass->setCameraData(view, cameraPosition);
+        });
     }
 }

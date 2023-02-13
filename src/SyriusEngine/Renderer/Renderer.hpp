@@ -22,6 +22,8 @@ namespace Syrius{
 
         [[nodiscard]] const UP<RenderContext>& getRenderContext() const;
 
+        [[nodiscard]] RCP<PBRenderLayer>& getPBRenderLayer();
+
     private:
 
         void setup();

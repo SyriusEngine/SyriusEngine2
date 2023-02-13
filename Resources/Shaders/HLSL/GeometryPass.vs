@@ -32,7 +32,7 @@ VS_OUT main(float3 pos: Position, float3 normal: Normal, float3 tangent: Tangent
     matrix<float, 3, 3> TBN = float3x3(T, B, N);
 
     VS_OUT output;
-    output.position = float4(pos, 1.0);
+    output.position = projPos;
     output.cameraPos = cameraPos.xyz;
     output.texCoord = texCoords;
     output.TBN = TBN;

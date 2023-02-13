@@ -8,6 +8,8 @@ struct VSout{
 };
 
 float4 main(VSout vsOut): SV_TARGET0{
-    float4 result = screenTexture.Sample(splr, vsOut.texCoords);
+    float2 texCoord = vsOut.texCoords;
+    texCoord.y = 1.0f - texCoord.y;
+    float4 result = screenTexture.Sample(splr, texCoord);
     return result;
 };
