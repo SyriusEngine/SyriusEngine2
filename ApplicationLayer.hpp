@@ -25,5 +25,6 @@ private:
     double m_LastFrameTime;
 
     EntityID m_Player;
+    EntityID m_Model;
     bool m_UseCamera = false;
 };

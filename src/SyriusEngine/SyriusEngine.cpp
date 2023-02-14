@@ -19,7 +19,6 @@ namespace Syrius{
         return m_Window.createView();
     }
 
-
     void init(){
         syriusCoreInit();
         MessageHandler::init();

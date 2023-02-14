@@ -16,6 +16,11 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
+    m_Model = m_Engine->createEntity();
+    m_Engine->addModelComponent(m_Model);
+    auto& modelComp = m_Engine->getModelComponent(m_Model);
+    modelComp.addSphere(32, 32);
+
 }
 
 void ApplicationLayer::onDetach() {

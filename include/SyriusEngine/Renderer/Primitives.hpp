@@ -36,4 +36,10 @@ namespace Syrius{
         Vertex(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& tangent, const glm::vec2& texCoord);
     };
 
+    struct MeshDesc {
+        std::vector<Vertex> vertices;
+        std::vector<uint32> indices;
+        MaterialID materialID = 0;
+    };
+
 }

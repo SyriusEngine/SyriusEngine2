@@ -11,7 +11,7 @@ include_directories(./Dependencies/SyriusCore/include)
 include_directories(./Dependencies/glm)
 
 set(ECS_SRC
-        src/SyriusEngine/ECS/CameraComponent.cpp)
+        src/SyriusEngine/ECS/CameraComponent.cpp src/SyriusEngine/ECS/ModelComponent.cpp src/SyriusEngine/ECS/MeshComponent.cpp src/SyriusEngine/ECS/Builtins.cpp)
 
 set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp

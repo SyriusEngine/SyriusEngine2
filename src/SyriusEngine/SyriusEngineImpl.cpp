@@ -69,4 +69,17 @@ namespace Syrius{
     void SyriusEngineImpl::removeCameraComponent(EntityID eid) {
         m_ECS->removeComponent<CameraComponent>(eid);
     }
+
+    void SyriusEngineImpl::addModelComponent(EntityID eid) {
+        m_ECS->addComponent<ModelComponent>(eid, m_Renderer->getPBRenderLayer());
+    }
+
+    ModelComponent &SyriusEngineImpl::getModelComponent(EntityID eid) {
+        return m_ECS->getComponent<ModelComponent>(eid);
+    }
+
+    void SyriusEngineImpl::removeModelComponent(EntityID eid) {
+        m_ECS->removeComponent<ModelComponent>(eid);
+    }
+
 }

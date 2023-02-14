@@ -8,6 +8,7 @@
 
 #include "ECS/ECS.hpp"
 #include "ECS/CameraComponent.hpp"
+#include "ECS/ModelComponent.hpp"
 
 namespace Syrius{
 
@@ -33,11 +34,17 @@ namespace Syrius{
 
         [[nodiscard]] virtual const UP<RenderContext>& getRenderContext() const = 0;
 
-        virtual void addCameraComponent(EntityID, float sensitivity, float speed) = 0;
+        virtual void addCameraComponent(EntityID eid, float sensitivity, float speed) = 0;
 
         [[nodiscard]] virtual CameraComponent& getCameraComponent(EntityID eid) = 0;
 
         virtual void removeCameraComponent(EntityID eid) = 0;
+
+        virtual void addModelComponent(EntityID eid) = 0;
+
+        [[nodiscard]] virtual ModelComponent& getModelComponent(EntityID eid) = 0;
+
+        virtual void removeModelComponent(EntityID eid) = 0;
 
         EntityID createEntity();
 

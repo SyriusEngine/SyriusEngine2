@@ -30,6 +30,12 @@ namespace Syrius{
 
         void removeCameraComponent(EntityID eid) override;
 
+        void addModelComponent(EntityID eid) override;
+
+        [[nodiscard]] ModelComponent& getModelComponent(EntityID eid) override;
+
+        void removeModelComponent(EntityID eid) override;
+
     private:
         UP<LayerStack> m_LayerStack;
         UP<Renderer> m_Renderer;

@@ -4,12 +4,6 @@
 
 namespace Syrius {
 
-    struct MeshDesc {
-        std::vector<Vertex> vertices;
-        std::vector<uint32> indices;
-        MaterialID materialID = 0;
-    };
-
     struct MeshTransformation {
         glm::mat4 modelMatrix = glm::mat4(1.0f);
         glm::mat4 normalMatrix = glm::mat4(1.0f);
