@@ -37,9 +37,8 @@ namespace Syrius{
             m_ScreenShader.release();
             m_Sampler.release();
 
-            m_RenderContext.reset();
-
             m_Window->destroyContext();
+            int x = 0; /// FOR SOME REASOM, IF I DELETE THIS LINE, THE ENGINE CRASHES WITH A SIGSEGV FAULT, THE HECK???
         });
         m_Worker.stop();
     }
