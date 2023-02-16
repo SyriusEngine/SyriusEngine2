@@ -13,6 +13,8 @@ namespace Syrius{
 
         void setTransformation(const glm::mat4& transformation) override;
 
+        void setMaterial(MaterialID materialID) override;
+
     private:
         MeshID m_MeshID;
 

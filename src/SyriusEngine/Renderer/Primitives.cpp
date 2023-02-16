@@ -21,5 +21,26 @@ namespace Syrius{
 
     }
 
+    MaterialDesc::MaterialDesc() {
+        ubyte colorVec[] = {162, 25, 255, 255, 1, 50, 32, 255,
+                           1, 50, 32, 255, 162, 25, 255, 255};
+        ubyte normalVec[] = {255, 0, 0, 255};
+        ubyte zeroVec[] = {0, 0, 0, 255};
+        albedo = createImage(colorVec, 1, 1, 4);
+        normal = createImage(normalVec, 1, 1, 4);
+        metallic = createImage(zeroVec, 1, 1, 4);
+        roughness = createImage(zeroVec, 1, 1, 4);
+        ao = createImage(zeroVec, 1, 1, 4);
+    }
+
+    MaterialDesc::MaterialDesc(const std::string &albedoPath, const std::string &normalPath,
+                               const std::string &metallicPath, const std::string &roughnessPath,
+                               const std::string &aoPath) {
+        albedo = createImage(albedoPath);
+        normal = createImage(normalPath);
+        metallic = createImage(metallicPath);
+        roughness = createImage(roughnessPath);
+        ao = createImage(aoPath);
+    }
 }
 

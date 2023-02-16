@@ -4,6 +4,7 @@
 #include "CameraDataPass.hpp"
 #include "ProjectionPass.hpp"
 #include "GeometryPass.hpp"
+#include "LightPass.hpp"
 
 namespace Syrius{
 
@@ -31,11 +32,22 @@ namespace Syrius{
 
         void setCameraData(const glm::mat4& view, const glm::vec3& cameraPosition);
 
+        MaterialID createMaterial(const MaterialDesc& matDesc);
+
+        void meshSetMaterial(MeshID meshID, MaterialID materialID);
+
+        void removeMaterial(MaterialID materialID);
+
+        LightID createLight(const LightDesc& lightDesc);
+
+        void removeLight(LightID lightID);
+
     private:
         RCP<ProjectionPass> m_ProjectionPass;
         RCP<CameraDataPass> m_CameraDataPass;
 
         RCP<GeometryPass> m_GeometryPass;
+        RCP<LightPass> m_LightPass;
 
     };
 

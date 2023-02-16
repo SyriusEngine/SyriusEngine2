@@ -9,6 +9,7 @@
 #include "ECS/ECS.hpp"
 #include "ECS/CameraComponent.hpp"
 #include "ECS/ModelComponent.hpp"
+#include "ECS/LightComponent.hpp"
 
 namespace Syrius{
 
@@ -45,6 +46,14 @@ namespace Syrius{
         [[nodiscard]] virtual ModelComponent& getModelComponent(EntityID eid) = 0;
 
         virtual void removeModelComponent(EntityID eid) = 0;
+
+        virtual MaterialID createMaterial(const MaterialDesc& desc) = 0;
+
+        virtual void removeMaterial(MaterialID materialID) = 0;
+
+        virtual void addLightComponent(EntityID eid, const LightDesc& lightDesc) = 0;
+
+        virtual void removeLightComponent(EntityID eid) = 0;
 
         EntityID createEntity();
 

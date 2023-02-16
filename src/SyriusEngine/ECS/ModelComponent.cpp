@@ -106,5 +106,11 @@ namespace Syrius{
         propagateTransformation(translate * rotate * scale);
     }
 
+    void ModelComponent::setMaterial(MaterialID materialID) {
+        for (const auto& child: m_ChildModels){
+            child->setMaterial(materialID);
+        }
+    }
+
 
 }

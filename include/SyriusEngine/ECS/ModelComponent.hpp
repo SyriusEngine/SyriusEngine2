@@ -42,6 +42,8 @@ namespace Syrius{
 
         virtual void setTransformation(const glm::mat4& transformation);
 
+        virtual void setMaterial(MaterialID materialID);
+
     protected:
 
         RCP<PBRenderLayer>& m_RenderLayer;

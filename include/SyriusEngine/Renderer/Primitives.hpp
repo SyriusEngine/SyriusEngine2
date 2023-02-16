@@ -42,4 +42,21 @@ namespace Syrius{
         MaterialID materialID = 0;
     };
 
+    struct SR_API MaterialDesc{
+        Resource<Image> albedo;
+        Resource<Image> normal;
+        Resource<Image> metallic;
+        Resource<Image> roughness;
+        Resource<Image> ao;
+
+        MaterialDesc();
+
+        MaterialDesc(const std::string& albedoPath, const std::string& normalPath, const std::string& metallicPath, const std::string& roughnessPath, const std::string& aoPath);
+    };
+
+    struct SR_API LightDesc{
+        glm::vec3 position;
+        glm::vec3 color;
+    };
+
 }

@@ -7,10 +7,10 @@ namespace Syrius{
         vpDesc.width = context->getWidth();
         vpDesc.height = context->getHeight();
 
-        ColorAttachmentDesc colorAttachmentDesc;
-        colorAttachmentDesc.width = vpDesc.width;
-        colorAttachmentDesc.height = vpDesc.height;
-        colorAttachmentDesc.format = SR_TEXTURE_DATA_FORMAT_RGBA_F32;
+        ColorAttachmentDesc f32Attachment;
+        f32Attachment.width = vpDesc.width;
+        f32Attachment.height = vpDesc.height;
+        f32Attachment.format = SR_TEXTURE_DATA_FORMAT_RGBA_F32;
 
         DepthStencilAttachmentDesc dsaDesc;
         dsaDesc.width = vpDesc.width;
@@ -20,8 +20,66 @@ namespace Syrius{
         auto fbDesc = context->createFrameBufferDescription();
         fbDesc->addViewportDesc(vpDesc);
         fbDesc->addDepthStencilAttachmentDesc(dsaDesc);
-        fbDesc->addColorAttachmentDesc(colorAttachmentDesc);
+        fbDesc->addColorAttachmentDesc(f32Attachment); //positions
+        fbDesc->addColorAttachmentDesc(f32Attachment); //normals
+        fbDesc->addColorAttachmentDesc(f32Attachment); //colors
+        fbDesc->addColorAttachmentDesc(f32Attachment); // Smoothness, roughness and AO
+
+
         return fbDesc;
+    }
+
+    MaterialHandle::MaterialHandle(ResourceView<Context> &context, const MaterialDesc &matDesc,
+                                   ResourceView<Sampler> &sampler) {
+        createTexture(m_Albedo, context, matDesc.albedo, sampler);
+        createTexture(m_Normal, context, matDesc.normal, sampler);
+        createTexture(m_Metallic, context, matDesc.metallic, sampler);
+        createTexture(m_Roughness, context, matDesc.roughness, sampler);
+        createTexture(m_Ao, context, matDesc.ao, sampler);
+    }
+
+    MaterialHandle::~MaterialHandle() = default;
+
+    void MaterialHandle::bind() {
+        m_Albedo->bind(0);
+        m_Normal->bind(1);
+        m_Metallic->bind(2);
+        m_Roughness->bind(3);
+        m_Ao->bind(4);
+    }
+
+    void MaterialHandle::createTexture(ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image, ResourceView<Sampler>& sampler){
+        Texture2DDesc desc;
+        desc.sampler = sampler;
+
+        if (image->getChannelCount() > 0){
+            desc.width = image->getWidth();
+            desc.height = image->getHeight();
+            switch (image->getChannelCount()){
+                case 1:
+                    desc.format = SR_TEXTURE_DATA_FORMAT_R_UI8;
+                    break;
+                case 2:
+                    desc.format = SR_TEXTURE_DATA_FORMAT_RG_UI8;
+                    break;
+                case 3:
+                    image->extendAlpha(255);
+                    desc.format = SR_TEXTURE_DATA_FORMAT_RGBA_UI8; // D3D11 does not support 3-channel textures, using 4 channels is better anyway for alignment
+                    break;
+                case 4:
+                    desc.format = SR_TEXTURE_DATA_FORMAT_RGBA_UI8;
+                    break;
+            }
+            desc.data = reinterpret_cast<const void*>(image->getData().data());
+        }
+        else{
+            desc.width = 1;
+            desc.height = 1;
+            desc.format = SR_TEXTURE_DATA_FORMAT_RGBA_UI8;
+            ubyte noColor[] = {255, 255, 255, 255};
+            desc.data = reinterpret_cast<const void*>(noColor);
+        }
+        texture = context->createTexture2D(desc);
     }
 
 
@@ -45,6 +103,16 @@ namespace Syrius{
         MeshTransformation defaultData;
         cbDesc.data = &defaultData;
         m_ModelData = m_Context->createConstantBuffer(cbDesc);
+
+        SamplerDesc samplerDesc;
+        samplerDesc.minFilter = SR_TEXTURE_FILTER_LINEAR;
+        samplerDesc.magFilter = SR_TEXTURE_FILTER_LINEAR;
+        samplerDesc.wrapU = SR_TEXTURE_WRAP_MIRROR_REPEAT;
+        samplerDesc.wrapV = SR_TEXTURE_WRAP_MIRROR_REPEAT;
+        m_Sampler = m_Context->createSampler(samplerDesc);
+
+        MaterialDesc defaultMaterial;
+        m_Materials.emplace(0, m_Context, defaultMaterial, m_Sampler);
     }
 
     GeometryPass::~GeometryPass() {
@@ -56,10 +124,12 @@ namespace Syrius{
 
         m_Context->beginRenderPass(m_FrameBuffer);
 
+        m_Sampler->bind(0);
         m_ModelData->bind();
         m_Shader->bind();
         for (const auto& data: m_Meshes){
             m_ModelData->setData(&data.transformation);
+            m_Materials[data.materialID].bind();
             m_Context->draw(data.vertexArray);
         }
         m_Context->endRenderPass(m_FrameBuffer);
@@ -102,5 +172,25 @@ namespace Syrius{
 
     void GeometryPass::removeMesh(MeshID mid) {
         m_Meshes.remove(mid);
+    }
+
+    MaterialID GeometryPass::createMaterial(const MaterialDesc &matDesc) {
+        MaterialID materialID = generateID();
+        m_Materials.emplace(materialID, m_Context, matDesc, m_Sampler);
+        return materialID;
+    }
+
+    void GeometryPass::meshSetMaterial(MeshID meshID, MaterialID materialID) {
+        auto& handle = m_Meshes[meshID];
+        handle.materialID = materialID;
+    }
+
+    void GeometryPass::removeMaterial(MaterialID materialID) {
+        for (auto& data: m_Meshes){
+            if (data.materialID == materialID){ //prevent that existing meshes are still using the material, just fall back to the default material
+                data.materialID = 0;
+            }
+        }
+        m_Materials.remove(materialID);
     }
 }

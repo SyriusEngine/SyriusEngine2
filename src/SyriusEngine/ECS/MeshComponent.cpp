@@ -19,4 +19,9 @@ namespace Syrius{
         m_RenderLayer->setMeshTransformation(m_MeshID, transformation);
     }
 
+    void MeshComponent::setMaterial(MaterialID materialID) {
+        m_RenderLayer->meshSetMaterial(m_MeshID, materialID);
+        ModelComponent::setMaterial(materialID);
+    }
+
 }

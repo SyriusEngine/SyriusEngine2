@@ -36,6 +36,14 @@ namespace Syrius{
 
         void removeModelComponent(EntityID eid) override;
 
+        MaterialID createMaterial(const MaterialDesc& desc) override;
+
+        void removeMaterial(MaterialID materialID) override;
+
+        void addLightComponent(EntityID eid, const LightDesc& lightDesc) override;
+
+        void removeLightComponent(EntityID eid) override;
+
     private:
         UP<LayerStack> m_LayerStack;
         UP<Renderer> m_Renderer;

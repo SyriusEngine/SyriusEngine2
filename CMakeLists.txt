@@ -11,7 +11,7 @@ include_directories(./Dependencies/SyriusCore/include)
 include_directories(./Dependencies/glm)
 
 set(ECS_SRC
-        src/SyriusEngine/ECS/CameraComponent.cpp src/SyriusEngine/ECS/ModelComponent.cpp src/SyriusEngine/ECS/MeshComponent.cpp src/SyriusEngine/ECS/Builtins.cpp)
+        src/SyriusEngine/ECS/CameraComponent.cpp src/SyriusEngine/ECS/ModelComponent.cpp src/SyriusEngine/ECS/MeshComponent.cpp src/SyriusEngine/ECS/Builtins.cpp src/SyriusEngine/ECS/LightComponent.cpp)
 
 set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp
@@ -25,7 +25,7 @@ set(RENDERER_SRC
         src/SyriusEngine/Renderer/PBRenderLayer/ResourcePass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/CameraDataPass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/ProjectionPass.cpp
-        src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp )
+        src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightPass.hpp)
 
 set(UTILS_SRC
         src/SyriusEngine/Utils/Worker.cpp src/SyriusEngine/ECS/CameraComponent.cpp)

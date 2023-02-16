@@ -1,16 +1,39 @@
 struct VS_OUT{
     float4 position: SV_Position;
     float3 cameraPos: CameraPos;
-    float2 texCoord: TexCoord;
+    float2 texCoords: TexCoords;
     matrix<float, 3, 3> TBN: TBNMatrix;
 };
 
 struct PS_OUT{
-    float4 fragColor: SV_TARGET0;
+    float4 gPositions : SV_TARGET0;
+    float4 gNormals : SV_TARGET1;
+    float4 gAlbedo : SV_TARGET2;
+    float4 gMrao : SV_TARGET3;
 };
 
+SamplerState splr: register(s0);
+
+Texture2D albedo: register(t0);
+Texture2D normalTex: register(t1);
+Texture2D metallicTex: register(t2);
+Texture2D roughnessTex: register(t3);
+Texture2D aoTex: register(t4);
+
 PS_OUT main(VS_OUT vsOutput){
+    float4 color = albedo.Sample(splr, vsOutput.texCoords);
+    float3 normal = normalize(2.0f * normalTex.Sample(splr, vsOutput.texCoords).xyz - 1.0f);
+    float3 N = normalize(mul(normal, vsOutput.TBN));
+
+    float metallic = metallicTex.Sample(splr, vsOutput.texCoords).x;
+    float roughness = roughnessTex.Sample(splr, vsOutput.texCoords).x;
+    float ao = aoTex.Sample(splr, vsOutput.texCoords).x;
+
     PS_OUT output;
-    output.fragColor = float4(0.5f, 0.3f, 0.8f, 1.0f);
+    output.gPositions = vsOutput.position;
+    output.gNormals = float4(N, 0.0f);
+    output.gAlbedo = color;
+    output.gMrao = float4(metallic, roughness, ao, 0.0f);
+
     return output;
 }

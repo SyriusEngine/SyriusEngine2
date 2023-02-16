@@ -82,4 +82,20 @@ namespace Syrius{
         m_ECS->removeComponent<ModelComponent>(eid);
     }
 
+    MaterialID SyriusEngineImpl::createMaterial(const MaterialDesc &desc) {
+        return m_Renderer->getPBRenderLayer()->createMaterial(desc);
+    }
+
+    void SyriusEngineImpl::removeMaterial(MaterialID materialID) {
+        m_Renderer->getPBRenderLayer()->removeMaterial(materialID);
+    }
+
+    void SyriusEngineImpl::addLightComponent(EntityID eid, const LightDesc &lightDesc) {
+        m_ECS->addComponent<LightComponent>(eid, lightDesc, m_Renderer->getPBRenderLayer());
+    }
+
+    void SyriusEngineImpl::removeLightComponent(EntityID eid) {
+        m_ECS->removeComponent<LightComponent>(eid);
+    }
+
 }
