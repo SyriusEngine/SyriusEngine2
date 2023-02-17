@@ -13,7 +13,11 @@ namespace Syrius{
     }
 
     SyriusEngineImpl::~SyriusEngineImpl() {
-
+        /*
+         * Kind of defeats the purpose of smart pointers, but the ECS has objects that depend on the renderer
+         */
+        m_ECS.reset();
+        m_Renderer.reset();
     }
 
     void SyriusEngineImpl::run() {
