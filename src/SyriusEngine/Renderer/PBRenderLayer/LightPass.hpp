@@ -13,7 +13,7 @@ namespace Syrius{
 
     class LightPass : public RenderPass{
     public:
-        explicit LightPass(ResourceView<Context>& context, UP<ShaderLibrary> &shaderLibrary, RCP<GeometryPass>& geometryPass);
+        explicit LightPass(const RenderData& renderData, RCP<GeometryPass>& geometryPass);
 
         ~LightPass() override;
 
@@ -27,7 +27,7 @@ namespace Syrius{
         ResourceView<VertexArray> m_ScreenVAO;
         ResourceView<VertexBuffer> m_ScreenVBO;
         ResourceView<IndexBuffer> m_ScreenIBO;
-        ResourceView<Sampler> m_Sampler;
+        ResourceView<Sampler>& m_Sampler;
         ResourceView<ConstantBuffer> m_LightDataBuffer;
 
         LightData m_LightData;

@@ -25,7 +25,7 @@ set(RENDERER_SRC
         src/SyriusEngine/Renderer/PBRenderLayer/ResourcePass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/CameraDataPass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/ProjectionPass.cpp
-        src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightPass.hpp)
+        src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightPass.hpp src/SyriusEngine/Renderer/PBRenderLayer/RenderData.cpp src/SyriusEngine/Renderer/PBRenderLayer/RenderData.hpp)
 
 set(UTILS_SRC
         src/SyriusEngine/Utils/Worker.cpp src/SyriusEngine/ECS/CameraComponent.cpp)

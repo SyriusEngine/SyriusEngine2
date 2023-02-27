@@ -43,6 +43,7 @@ namespace Syrius{
         void removeLight(LightID lightID);
 
     private:
+
         RCP<ProjectionPass> m_ProjectionPass;
         RCP<CameraDataPass> m_CameraDataPass;
 

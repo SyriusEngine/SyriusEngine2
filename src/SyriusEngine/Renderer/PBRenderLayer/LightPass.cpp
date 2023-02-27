@@ -19,8 +19,9 @@ namespace Syrius{
     }
 
 
-    LightPass::LightPass(ResourceView<Context> &context, UP<ShaderLibrary> &shaderLibrary, RCP<GeometryPass>& geometryPass) :
-    RenderPass(context, createLightPassFramebufferDesc(context)),
+    LightPass::LightPass(const RenderData& renderData, RCP<GeometryPass>& geometryPass) :
+    RenderPass(renderData.context, createLightPassFramebufferDesc(renderData.context)),
+    m_Sampler(renderData.defaultSampler),
     m_LightCount(0),
     m_GeometryPass(geometryPass){
         addInput(m_GeometryPass);
@@ -28,7 +29,7 @@ namespace Syrius{
         m_VertexDescription->addAttribute("Position", SR_FLOAT32_2);
         m_VertexDescription->addAttribute("TexCoords", SR_FLOAT32_2);
 
-        auto package = shaderLibrary->getPackage("LightPass");
+        auto package = renderData.shaderLibrary->getPackage("LightPass");
         m_Shader = m_Context->createShader(package);
 
         VertexBufferDesc vbDesc;
@@ -53,13 +54,6 @@ namespace Syrius{
         vaDesc.vertexShader = package.vertexShader;
         m_ScreenVAO = m_Context->createVertexArray(vaDesc);
 
-        SamplerDesc samplerDesc;
-        samplerDesc.minFilter = SR_TEXTURE_FILTER_LINEAR;
-        samplerDesc.magFilter = SR_TEXTURE_FILTER_LINEAR;
-        samplerDesc.wrapU = SR_TEXTURE_WRAP_REPEAT;
-        samplerDesc.wrapV = SR_TEXTURE_WRAP_REPEAT;
-        m_Sampler = m_Context->createSampler(samplerDesc);
-
         ConstantBufferDesc cbDesc;
         cbDesc.name = "LightData";
         cbDesc.size = sizeof(LightData);
@@ -82,7 +76,6 @@ namespace Syrius{
         m_Context->beginRenderPass(m_FrameBuffer);
 
         m_Shader->bind();
-        m_Sampler->bind(0);
         m_LightDataBuffer->bind();
 
         for (uint32 i = 0; i < 4; i++){

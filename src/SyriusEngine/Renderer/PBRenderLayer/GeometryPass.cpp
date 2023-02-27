@@ -83,14 +83,15 @@ namespace Syrius{
     }
 
 
-    GeometryPass::GeometryPass(ResourceView<Context> &context, UP<ShaderLibrary> &shaderLibrary):
-    RenderPass(context, createGeometryPassFramebufferDesc(context)){
+    GeometryPass::GeometryPass(const RenderData& renderData):
+    RenderPass(renderData.context, createGeometryPassFramebufferDesc(renderData.context)),
+    m_Sampler(renderData.defaultSampler){
         m_VertexDescription->addAttribute("Position", SR_FLOAT32_3);
         m_VertexDescription->addAttribute("Normal", SR_FLOAT32_3);
         m_VertexDescription->addAttribute("Tangent", SR_FLOAT32_3);
         m_VertexDescription->addAttribute("TexCoords", SR_FLOAT32_2);
 
-        auto package = shaderLibrary->getPackage("GeometryPass");
+        auto package = renderData.shaderLibrary->getPackage("GeometryPass");
         m_VertexShaderModule = package.vertexShader;
         m_Shader = m_Context->createShader(package);
 
@@ -103,13 +104,6 @@ namespace Syrius{
         MeshTransformation defaultData;
         cbDesc.data = &defaultData;
         m_ModelData = m_Context->createConstantBuffer(cbDesc);
-
-        SamplerDesc samplerDesc;
-        samplerDesc.minFilter = SR_TEXTURE_FILTER_LINEAR;
-        samplerDesc.magFilter = SR_TEXTURE_FILTER_LINEAR;
-        samplerDesc.wrapU = SR_TEXTURE_WRAP_MIRROR_REPEAT;
-        samplerDesc.wrapV = SR_TEXTURE_WRAP_MIRROR_REPEAT;
-        m_Sampler = m_Context->createSampler(samplerDesc);
 
         MaterialDesc defaultMaterial;
         m_Materials.emplace(0, m_Context, defaultMaterial, m_Sampler);
@@ -124,7 +118,6 @@ namespace Syrius{
 
         m_Context->beginRenderPass(m_FrameBuffer);
 
-        m_Sampler->bind(0);
         m_ModelData->bind();
         m_Shader->bind();
         for (const auto& data: m_Meshes){

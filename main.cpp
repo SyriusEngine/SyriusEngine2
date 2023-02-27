@@ -6,13 +6,13 @@ int main() {
     init();
     try{
         ////// OPENGL
-//        SyriusEngineDesc glDesc;
-//        glDesc.renderAPI = SR_API_OPENGL;
-//        glDesc.window.title = "SyriusEngine - OpenGL";
-//        auto glEngine = createEngine(glDesc);
-//        auto glApp = createRCP<ApplicationLayer>(glEngine);
-//        glEngine->pushLayer(glApp);
-//        glEngine->run();
+        SyriusEngineDesc glDesc;
+        glDesc.renderAPI = SR_API_OPENGL;
+        glDesc.window.title = "SyriusEngine - OpenGL";
+        auto glEngine = createEngine(glDesc);
+        auto glApp = createRCP<ApplicationLayer>(glEngine);
+        glEngine->pushLayer(glApp);
+        glEngine->run();
 
 
         ////// D3D11

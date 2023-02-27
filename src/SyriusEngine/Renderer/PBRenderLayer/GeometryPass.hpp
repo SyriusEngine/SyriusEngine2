@@ -40,7 +40,7 @@ namespace Syrius {
 
     class GeometryPass : public RenderPass {
     public:
-        GeometryPass(ResourceView<Context> &context, UP<ShaderLibrary>& shaderLibrary);
+        explicit GeometryPass(const RenderData& renderData);
 
         ~GeometryPass() override;
 
@@ -64,7 +64,7 @@ namespace Syrius {
 
         ResourceView<ShaderModule> m_VertexShaderModule;
         ResourceView<ConstantBuffer> m_ModelData;
-        ResourceView<Sampler> m_Sampler;
+        ResourceView<Sampler>& m_Sampler;
     };
 
 }

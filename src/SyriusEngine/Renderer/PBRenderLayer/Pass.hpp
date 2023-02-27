@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../../../include/SyriusEngine/Renderer/Primitives.hpp"
+#include "RenderData.hpp"
 
 namespace Syrius{
 

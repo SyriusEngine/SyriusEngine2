@@ -51,7 +51,7 @@ namespace Syrius{
 
         MaterialDesc();
 
-        MaterialDesc(const std::string& albedoPath, const std::string& normalPath, const std::string& metallicPath, const std::string& roughnessPath, const std::string& aoPath);
+        explicit MaterialDesc(const std::string& albedoPath, const std::string& normalPath = "", const std::string& metallicPath = "", const std::string& roughnessPath = "", const std::string& aoPath = "");
     };
 
     struct SR_API LightDesc{

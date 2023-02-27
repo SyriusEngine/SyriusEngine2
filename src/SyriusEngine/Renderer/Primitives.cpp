@@ -26,7 +26,7 @@ namespace Syrius{
                            1, 50, 32, 255, 162, 25, 255, 255};
         ubyte normalVec[] = {255, 0, 0, 255};
         ubyte zeroVec[] = {0, 0, 0, 255};
-        albedo = createImage(colorVec, 1, 1, 4);
+        albedo = createImage(colorVec, 2, 2, 4);
         normal = createImage(normalVec, 1, 1, 4);
         metallic = createImage(zeroVec, 1, 1, 4);
         roughness = createImage(zeroVec, 1, 1, 4);
@@ -36,11 +36,22 @@ namespace Syrius{
     MaterialDesc::MaterialDesc(const std::string &albedoPath, const std::string &normalPath,
                                const std::string &metallicPath, const std::string &roughnessPath,
                                const std::string &aoPath) {
+        ubyte normalVec[] = {255, 0, 0, 255};
+        ubyte zeroVec[] = {0, 0, 0, 255};
         albedo = createImage(albedoPath);
-        normal = createImage(normalPath);
-        metallic = createImage(metallicPath);
-        roughness = createImage(roughnessPath);
-        ao = createImage(aoPath);
+
+        auto fillTexture = [&](Resource<Image>& texture, const std::string& path, const ubyte* vec){
+            if(path.empty()){
+                texture = createImage(vec, 1, 1, 4);
+            }else{
+                texture = createImage(path);
+            }
+        };
+
+        fillTexture(normal, normalPath, normalVec);
+        fillTexture(metallic, metallicPath, zeroVec);
+        fillTexture(roughness, roughnessPath, zeroVec);
+        fillTexture(ao, aoPath, zeroVec);
     }
 }
 
