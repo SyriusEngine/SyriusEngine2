@@ -5,18 +5,22 @@ Texture2D mrao : register(t3);
 
 SamplerState splr : register(s0);
 
-cbuffer LightData : register(b3)
-{
+cbuffer LightData : register(b3) {
     float4 lightPos[300];
     float4 lightColor[300];
     uint lightCount;
 }
 
-struct VS_OUT
-{
+struct VS_OUT {
     float4 vertexPos : SV_Position;
     float3 cameraPos : CameraPos;
     float2 texCoords : TexCoords;
+};
+
+struct PS_OUT {
+    float4 color : SV_Target0;
+    float4 debug1 : SV_Target1;
+    float4 debug2 : SV_Target2;
 };
 
 static const float PI = 3.14159265359f;
@@ -51,8 +55,7 @@ float3 fresnelSchlick(float cosTheta, float3 f0)
     return f0 + (1.0f - f0) * pow(abs(1.0f - cosTheta), 5.0f);
 }
 
-float4 main(VS_OUT vsOut) : SV_Target
-{
+PS_OUT main(VS_OUT vsOut) {
     float2 texCoord = vsOut.texCoords;
     texCoord.y = 1.0f - texCoord.y;
 
@@ -98,5 +101,9 @@ float4 main(VS_OUT vsOut) : SV_Target
     color = color / (color + float3(1.0, 1.0, 1.0));
     color = pow(abs(color), float3(1.0 / 2.2, 1.0 / 2.2, 1.0 / 2.2));
 
-    return float4(color, 1.0);
+    PS_OUT psOut;
+    psOut.color = float4(color, 1.0);
+    psOut.debug1 = float4(normal, 1.0);
+    psOut.debug2 = float4(position, 1.0);
+    return psOut;
 }
