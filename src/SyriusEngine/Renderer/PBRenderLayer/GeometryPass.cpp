@@ -32,9 +32,6 @@ namespace Syrius{
     MaterialHandle::MaterialHandle(ResourceView<Context> &context, const MaterialDesc &matDesc,
                                    ResourceView<Sampler> &sampler) {
         auto createTexture = [&](ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image, ResourceView<Sampler>& sampler) {
-            if (image->getChannelCount() == 3){
-                image->extendAlpha(255);
-            }
             Texture2DImageDesc desc(image, sampler);
             texture = context->createTexture2D(desc);
         };

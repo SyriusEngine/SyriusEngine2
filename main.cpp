@@ -4,6 +4,7 @@
 
 int main() {
     init();
+
     try{
         ////// OPENGL
         SyriusEngineDesc glDesc;
