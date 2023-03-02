@@ -50,29 +50,30 @@ vec3 fresnelSchlick(float cosTheta, vec3 f0){
 
 void main(){
     vec3 position = texture(positions, res.texCoords).xyz;
-    vec3 N = texture(normals, res.texCoords).rgb;
-    vec3 albedo = texture(albedo, res.texCoords).rgb;
+    vec3 normal = texture(normals, res.texCoords).rgb;
+    vec3 albedoTexel = texture(albedo, res.texCoords).rgb;
 
-    float metallic = texture(mrao, res.texCoords).r;
-    float roughness = texture(mrao, res.texCoords).g;
-    float ao = texture(mrao, res.texCoords).b;
+    vec4 mraoTexel = texture(mrao, res.texCoords);
+    float metallic = mraoTexel.r;
+    float roughness = mraoTexel.g;
+    float ao = mraoTexel.b;
 
     vec3 viewDir = normalize(res.cameraPos - position);
 
-    vec3 F0 = mix(vec3(0.04), albedo, metallic);
+    vec3 F0 = mix(vec3(0.04), albedoTexel, metallic);
 
     vec3 result = vec3(0.0);
     for (uint i = 0; i < lightCount; i++){
         vec3 lightDir = normalize(lightPos[i].xyz - position);
         vec3 halfway = normalize(lightDir + viewDir);
-        float NdotL = max(dot(N, lightDir), 0.0);
+        float NdotL = max(dot(normal, lightDir), 0.0);
 
         float distance = length(lightPos[i].xyz - position);
         float attenuation = 1.0 / (distance * distance);
         vec3 radiance = lightColor[i].rgb * attenuation;
 
-        float NDF = trowbridgeReitzGGX(N, halfway, roughness);
-        float G = geometrySmith(N, viewDir, lightDir, roughness);
+        float NDF = trowbridgeReitzGGX(normal, halfway, roughness);
+        float G = geometrySmith(normal, viewDir, lightDir, roughness);
         vec3 F = fresnelSchlick(max(dot(halfway, viewDir), 0.0), F0);
 
         vec3 kS = F;
@@ -80,12 +81,12 @@ void main(){
         kD *= 1.0 - metallic;
 
         vec3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, viewDir), 0.0) * NdotL + 0.0001;
+        float denominator = 4.0 * max(dot(normal, viewDir), 0.0) * NdotL + 0.0001;
         vec3 specular = numerator / denominator;
-        result += (kD * albedo / PI + specular) * NdotL * radiance;
+        result += (kD * albedoTexel / PI + specular) * NdotL * radiance;
     }
 
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient = vec3(0.03) * albedoTexel * ao;
     vec3 color = ambient + result;
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));

@@ -1,25 +1,102 @@
-Texture2D positions: register(t0);
-Texture2D normals: register(t1);
-Texture2D albedo: register(t2);
-Texture2D mrao: register(t3);
+Texture2D positions : register(t0);
+Texture2D normals : register(t1);
+Texture2D albedo : register(t2);
+Texture2D mrao : register(t3);
 
-SamplerState splr: register(s0);
+SamplerState splr : register(s0);
 
-cbuffer LightData: register(b3){
+cbuffer LightData : register(b3)
+{
     float4 lightPos[300];
     float4 lightColor[300];
     uint lightCount;
 }
 
-struct VS_OUT{
-    float4 position : SV_POSITION;
-    float3 cameraPos: CameraPos;
-    float2 texCoords: TexCoords;
+struct VS_OUT
+{
+    float4 vertexPos : SV_Position;
+    float3 cameraPos : CameraPos;
+    float2 texCoords : TexCoords;
 };
 
-float4 main(VS_OUT vsOut): SV_Target{
+static const float PI = 3.14159265359f;
+
+float trowbridgeReitzGGX(float3 normal, float3 halfway, float roughness)
+{
+    float a2 = roughness * roughness;
+
+    float t1 = max(dot(normal, halfway), 0.0f);
+    float t2 = ((t1 * t1) * (a2 - 1) + 1);
+    float denom = PI * t2 * t2;
+    float retVal = a2 / denom;
+
+    return retVal;
+}
+
+float geometrySmith(float3 normal, float3 viewDir, float3 lightDir, float roughness)
+{
+    float nv = max(dot(normal, viewDir), 0.0f);
+    float nl = max(dot(normal, lightDir), 0.0f);
+
+    float gSchlickGGXnv = nv / (nv * (1 - roughness) + roughness);
+    float gSchlickGGXnl = nl / (nl * (1 - roughness) + roughness);
+    float retVal = gSchlickGGXnv * gSchlickGGXnl;
+
+    return retVal;
+}
+
+// Fresnel Equation (Used to describe ratio of reflected and refracted light)
+float3 fresnelSchlick(float cosTheta, float3 f0)
+{
+    return f0 + (1.0f - f0) * pow(abs(1.0f - cosTheta), 5.0f);
+}
+
+float4 main(VS_OUT vsOut) : SV_Target
+{
     float2 texCoord = vsOut.texCoords;
     texCoord.y = 1.0f - texCoord.y;
-    float4 color = albedo.Sample(splr, texCoord);
-    return color;
+
+    float3 position = positions.Sample(splr, texCoord).xyz;
+    float3 normal = normals.Sample(splr, texCoord).rgb;
+    float3 albedoTexel = albedo.Sample(splr, texCoord).rgb;
+
+    float3 mraoTexel = mrao.Sample(splr, texCoord).rgb;
+    float metallic = mraoTexel.r;
+    float roughness = mraoTexel.g;
+    float ao = mraoTexel.b;
+
+    float3 viewDir = normalize(vsOut.cameraPos - position);
+
+    float3 F0 = lerp(float3(0.4f, 0.4f, 0.4f), albedoTexel.rgb, metallic);
+
+    float3 result = float3(0.0, 0.0, 0.0);
+    for (uint i = 0; i < lightCount; i++) {
+        float3 lightDir = normalize(lightPos[i].xyz - position);
+        float3 halfway = normalize(lightDir + viewDir);
+        float NdotL = max(dot(normal, lightDir), 0.0);
+
+        float distance = length(lightPos[i].xyz - position);
+        float attenuation = 1.0 / (distance * distance);
+        float3 radiance = lightColor[i].rgb * attenuation;
+
+        float NDF = trowbridgeReitzGGX(normal, halfway, roughness);
+        float G = geometrySmith(normal, viewDir, lightDir, roughness);
+        float3 F = fresnelSchlick(max(dot(halfway, viewDir), 0.0), F0);
+
+        float3 kS = F;
+        float3 kD = float3(1.0, 1.0, 1.0) - kS;
+        kD *= 1.0 - metallic;
+
+        float3 numerator = NDF * G * F;
+        float denominator = 4.0 * max(dot(normal, viewDir), 0.0) * NdotL + 0.0001;
+        float3 specular = numerator / denominator;
+        result += (kD * albedoTexel / PI + specular) * NdotL * radiance;
+    }
+
+    float3 ambient = float3(0.03, 0.03, 0.03) * albedoTexel * ao;
+    float3 color = ambient + result;
+    color = color / (color + float3(1.0, 1.0, 1.0));
+    color = pow(abs(color), float3(1.0 / 2.2, 1.0 / 2.2, 1.0 / 2.2));
+
+    return float4(color, 1.0);
 }
