@@ -49,37 +49,24 @@ namespace Syrius{
     }
 
     void MaterialHandle::createTexture(ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image, ResourceView<Sampler>& sampler){
-        Texture2DDesc desc;
-        desc.sampler = sampler;
-
-        if (image->getChannelCount() > 0){
-            desc.width = image->getWidth();
-            desc.height = image->getHeight();
-            switch (image->getChannelCount()){
-                case 1:
-                    desc.format = SR_TEXTURE_DATA_FORMAT_R_UI8;
-                    break;
-                case 2:
-                    desc.format = SR_TEXTURE_DATA_FORMAT_RG_UI8;
-                    break;
-                case 3:
-                    image->extendAlpha(255);
-                    desc.format = SR_TEXTURE_DATA_FORMAT_RGBA_UI8; // D3D11 does not support 3-channel textures, using 4 channels is better anyway for alignment
-                    break;
-                case 4:
-                    desc.format = SR_TEXTURE_DATA_FORMAT_RGBA_UI8;
-                    break;
+        auto channelCount = image->getChannelCount();
+        if (channelCount > 0){
+            if (channelCount == 3){
+                image->extendAlpha(255);
             }
-            desc.data = reinterpret_cast<const void*>(image->getData().data());
+            Texture2DImageDesc desc(image, sampler);
+            texture = context->createTexture2D(desc);
         }
         else{
+            Texture2DDesc desc;
+            desc.sampler = sampler;
             desc.width = 1;
             desc.height = 1;
             desc.format = SR_TEXTURE_DATA_FORMAT_RGBA_UI8;
             ubyte noColor[] = {255, 255, 255, 255};
             desc.data = reinterpret_cast<const void*>(noColor);
+            texture = context->createTexture2D(desc);
         }
-        texture = context->createTexture2D(desc);
     }
 
 

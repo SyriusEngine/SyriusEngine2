@@ -14,10 +14,6 @@ namespace Syrius{
             m_Context = m_Window->createContext(contextDesc);
 
             SamplerDesc splrDesc;
-            splrDesc.minFilter = SR_TEXTURE_FILTER_LINEAR;
-            splrDesc.magFilter = SR_TEXTURE_FILTER_LINEAR;
-            splrDesc.wrapU = SR_TEXTURE_WRAP_REPEAT;
-            splrDesc.wrapV = SR_TEXTURE_WRAP_REPEAT;
             m_Sampler = m_Context->createSampler(splrDesc);
 
             m_RenderContext = createUP<RenderContext>(m_Context, m_Worker, m_Sampler, rendererDesc.shaderLibraryPath);

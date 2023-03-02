@@ -9,7 +9,7 @@ struct VSout{
 
 float4 main(VSout vsOut): SV_TARGET0{
     float2 texCoord = vsOut.texCoords;
-    texCoord.y = 1.0f - texCoord.y;
+    texCoord.y = 1.0f - texCoord.y; // GLSL and HLSL have different texture coordinate systems
     float4 result = screenTexture.Sample(splr, texCoord);
     return result;
 };

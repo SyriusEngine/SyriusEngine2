@@ -16,16 +16,23 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    MaterialDesc matDesc("./Resources/Textures/RustedIron/rustediron2_basecolor.png",
-                         "./Resources/Textures/RustedIron/rustediron2_normal.png",
-                         "./Resources/Textures/RustedIron/rustediron2_metallic.png",
-                         "./Resources/Textures/RustedIron/rustediron2_roughness.png");
+//    MaterialDesc matDesc("./Resources/Textures/RustedIron/rustediron2_basecolor.png",
+//                         "./Resources/Textures/RustedIron/rustediron2_normal.png",
+//                         "./Resources/Textures/RustedIron/rustediron2_metallic.png",
+//                         "./Resources/Textures/RustedIron/rustediron2_roughness.png");
+
+    MaterialDesc matDesc("./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_basecolor.png",
+                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_normal.png",
+                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_metallic.png",
+                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_roughness.png",
+                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_ao.png"
+            );
     auto chippedPaintMetal = m_Engine->createMaterial(matDesc);
 
     m_Model = m_Engine->createEntity();
     m_Engine->addModelComponent(m_Model);
     auto& modelComp = m_Engine->getModelComponent(m_Model);
-    modelComp.addCube();
+    modelComp.addQuad();
     modelComp.setMaterial(chippedPaintMetal);
     modelComp.setTranslate({0.0f, 0.0f, 2.0f});
 
