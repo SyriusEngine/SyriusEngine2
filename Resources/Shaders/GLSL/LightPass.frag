@@ -90,5 +90,5 @@ void main(){
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
 
-    fragColor = vec4(albedo, 1.0);
+    fragColor = vec4(color, 1.0);
 }

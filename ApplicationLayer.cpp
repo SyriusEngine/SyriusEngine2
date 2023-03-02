@@ -32,7 +32,7 @@ void ApplicationLayer::onAttach() {
     m_Model = m_Engine->createEntity();
     m_Engine->addModelComponent(m_Model);
     auto& modelComp = m_Engine->getModelComponent(m_Model);
-    modelComp.addQuad();
+    modelComp.addCube();
     modelComp.setMaterial(chippedPaintMetal);
     modelComp.setTranslate({0.0f, 0.0f, 2.0f});
 

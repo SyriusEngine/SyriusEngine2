@@ -26,10 +26,6 @@ namespace Syrius {
         void bind();
 
     private:
-
-        void createTexture(ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image, ResourceView<Sampler>& sampler);
-
-    private:
         ResourceView<Texture2D> m_Albedo;
         ResourceView<Texture2D> m_Normal;
         ResourceView<Texture2D> m_Metallic;

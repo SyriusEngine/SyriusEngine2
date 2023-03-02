@@ -31,6 +31,13 @@ namespace Syrius{
 
     MaterialHandle::MaterialHandle(ResourceView<Context> &context, const MaterialDesc &matDesc,
                                    ResourceView<Sampler> &sampler) {
+        auto createTexture = [&](ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image, ResourceView<Sampler>& sampler) {
+            if (image->getChannelCount() == 3){
+                image->extendAlpha(255);
+            }
+            Texture2DImageDesc desc(image, sampler);
+            texture = context->createTexture2D(desc);
+        };
         createTexture(m_Albedo, context, matDesc.albedo, sampler);
         createTexture(m_Normal, context, matDesc.normal, sampler);
         createTexture(m_Metallic, context, matDesc.metallic, sampler);
@@ -46,27 +53,6 @@ namespace Syrius{
         m_Metallic->bind(2);
         m_Roughness->bind(3);
         m_Ao->bind(4);
-    }
-
-    void MaterialHandle::createTexture(ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image, ResourceView<Sampler>& sampler){
-        auto channelCount = image->getChannelCount();
-        if (channelCount > 0){
-            if (channelCount == 3){
-                image->extendAlpha(255);
-            }
-            Texture2DImageDesc desc(image, sampler);
-            texture = context->createTexture2D(desc);
-        }
-        else{
-            Texture2DDesc desc;
-            desc.sampler = sampler;
-            desc.width = 1;
-            desc.height = 1;
-            desc.format = SR_TEXTURE_DATA_FORMAT_RGBA_UI8;
-            ubyte noColor[] = {255, 255, 255, 255};
-            desc.data = reinterpret_cast<const void*>(noColor);
-            texture = context->createTexture2D(desc);
-        }
     }
 
 

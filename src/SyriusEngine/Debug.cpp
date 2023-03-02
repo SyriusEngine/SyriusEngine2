@@ -21,6 +21,7 @@ namespace Syrius{
             case SR_MESSAGE_SYRIUS_CORE:    return "SYRIUS_CORE";
             case SR_MESSAGE_RENDERER:       return "RENDERER";
             case SR_MESSAGE_ECS:            return "ECS";
+            default:                        return "UNKNOWN";
         }
     }
 
@@ -32,6 +33,7 @@ namespace Syrius{
             case SR_MESSAGE_SEVERITY_HIGH:  return "HIGH";
             case SR_MESSAGE_PRECONDITION:   return "PRECONDITION";
             case SR_MESSAGE_POSTCONDITION:  return "POSTCONDITION";
+            default:                        return "UNKNOWN";
         }
     }
 
