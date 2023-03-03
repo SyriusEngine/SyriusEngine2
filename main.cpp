@@ -1,29 +1,31 @@
 #include <iostream>
 #include "ApplicationLayer.hpp"
 
+void runEngine(SR_SUPPORTED_API api, uint32 width, uint32 height, int32 x, int32 y){
+    SyriusEngineDesc desc;
+    desc.window.width = width;
+    desc.window.height = height;
+    desc.window.xPos = x;
+    desc.window.yPos = y;
+    desc.renderAPI = api;
+    desc.window.title = "SyriusEngine - " + Syrius::getAPIName(api);
+    auto engine = createEngine(desc);
+    auto appLayer = createRCP<ApplicationLayer>(engine);
+    engine->pushLayer(appLayer);
+    engine->run();
+}
+
 
 int main() {
     init();
 
     try{
-        ////// OPENGL
-        SyriusEngineDesc glDesc;
-        glDesc.renderAPI = SR_API_OPENGL;
-        glDesc.window.title = "SyriusEngine - OpenGL";
-        auto glEngine = createEngine(glDesc);
-        auto glApp = createRCP<ApplicationLayer>(glEngine);
-        glEngine->pushLayer(glApp);
-        glEngine->run();
+        std::thread t1(runEngine, SR_SUPPORTED_API::SR_API_OPENGL, 1280, 720, 0, 0);
+        std::thread t2(runEngine, SR_SUPPORTED_API::SR_API_D3D11, 1280, 720, 1280, 0);
 
+        t1.join();
+        t2.join();
 
-        ////// D3D11
-        SyriusEngineDesc d3d11Desc;
-        d3d11Desc.renderAPI = SR_API_D3D11;
-        d3d11Desc.window.title = "SyriusEngine - D3D11";
-        auto d3d11Engine = createEngine(d3d11Desc);
-        auto d3d11App = createRCP<ApplicationLayer>(d3d11Engine);
-        d3d11Engine->pushLayer(d3d11App);
-        d3d11Engine->run();
 
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
