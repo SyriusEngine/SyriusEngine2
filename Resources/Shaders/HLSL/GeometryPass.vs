@@ -16,7 +16,7 @@ cbuffer ModelData: register(b2){
 struct VS_OUT{
     float4 position: SV_Position;
     float3 cameraPos: CameraPos;
-    float2 texCoord: TexCoord;
+    float2 texCoord: TexCoords;
     matrix<float, 3, 3> TBN: TBNMatrix;
 };
 

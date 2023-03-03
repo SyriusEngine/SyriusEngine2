@@ -17,7 +17,7 @@ layout(binding = 3) uniform sampler2D mrao;
 layout(std140, binding = 3) uniform LightData {
     vec4 lightPos[300];
     vec4 lightColor[300];
-    uint lightCount;
+    uvec4 lightCount;
 };
 
 const float PI = 3.14159265359f;
@@ -65,7 +65,7 @@ void main(){
     vec3 F0 = mix(vec3(0.04), albedoTexel, metallic);
 
     vec3 result = vec3(0.0);
-    for (uint i = 0; i < lightCount; i++){
+    for (uint i = 0; i < lightCount.x; i++){
         vec3 lightDir = normalize(lightPos[i].xyz - position);
         vec3 halfway = normalize(lightDir + viewDir);
         float NdotL = max(dot(normal, lightDir), 0.0);
@@ -94,6 +94,6 @@ void main(){
     color = pow(color, vec3(1.0/2.2));
 
     fragColor = vec4(color, 1.0);
-    debug1 = vec4(normal, 1.0);
+    debug1 = vec4(viewDir, 1.0);
     debug2 = vec4(position, 1.0);
 }

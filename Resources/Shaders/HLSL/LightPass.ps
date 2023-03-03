@@ -8,7 +8,7 @@ SamplerState splr : register(s0);
 cbuffer LightData : register(b3) {
     float4 lightPos[300];
     float4 lightColor[300];
-    uint lightCount;
+    uint4 lightCount;
 }
 
 struct VS_OUT {
@@ -57,7 +57,7 @@ float3 fresnelSchlick(float cosTheta, float3 f0)
 
 PS_OUT main(VS_OUT vsOut) {
     float2 texCoord = vsOut.texCoords;
-
+    texCoord.y = 1.0 - texCoord.y;
     float3 position = positions.Sample(splr, texCoord).xyz;
     float3 normal = normals.Sample(splr, texCoord).rgb;
     float3 albedoTexel = albedo.Sample(splr, texCoord).rgb;
@@ -72,7 +72,7 @@ PS_OUT main(VS_OUT vsOut) {
     float3 F0 = lerp(float3(0.4f, 0.4f, 0.4f), albedoTexel.rgb, metallic);
 
     float3 result = float3(0.0, 0.0, 0.0);
-    for (uint i = 0; i < lightCount; i++) {
+    for (uint i = 0; i < lightCount.x; i++) {
         float3 lightDir = normalize(lightPos[i].xyz - position);
         float3 halfway = normalize(lightDir + viewDir);
         float NdotL = max(dot(normal, lightDir), 0.0);
@@ -102,7 +102,7 @@ PS_OUT main(VS_OUT vsOut) {
 
     PS_OUT psOut;
     psOut.color = float4(color, 1.0);
-    psOut.debug1 = float4(normal, 1.0);
+    psOut.debug1 = float4(viewDir, 1.0);
     psOut.debug2 = float4(position, 1.0);
     return psOut;
 }
