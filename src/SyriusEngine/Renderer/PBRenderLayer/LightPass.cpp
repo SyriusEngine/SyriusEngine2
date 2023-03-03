@@ -85,10 +85,7 @@ namespace Syrius{
         }
         m_Context->draw(m_ScreenVAO);
         m_Context->endRenderPass(m_FrameBuffer);
-
-        m_FrameBuffer->getColorAttachment(1)->getData()->writeToFile("Debug1" + getAPIName(m_Context->getType()) + ".png");
-        m_FrameBuffer->getColorAttachment(2)->getData()->writeToFile("Debug2" + getAPIName(m_Context->getType()) + ".png");
-    }
+}
 
     LightID LightPass::createLight(const LightDesc& desc) {
         LightID lid = generateID();
