@@ -15,8 +15,6 @@ namespace Syrius{
         auto fbDesc = context->createFrameBufferDescription();
         fbDesc->addViewportDesc(vpDesc);
         fbDesc->addColorAttachmentDesc(f32Attachment); // final color
-        fbDesc->addColorAttachmentDesc(f32Attachment); // debug
-        fbDesc->addColorAttachmentDesc(f32Attachment); // debug
         return fbDesc;
     }
 

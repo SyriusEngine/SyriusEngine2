@@ -15,6 +15,7 @@ cbuffer ModelData: register(b2){
 
 struct VS_OUT{
     float4 position: SV_Position;
+    float4 worldPos: WorldPos;
     float3 cameraPos: CameraPos;
     float2 texCoord: TexCoords;
     matrix<float, 3, 3> TBN: TBNMatrix;
@@ -33,6 +34,7 @@ VS_OUT main(float3 pos: Position, float3 normal: Normal, float3 tangent: Tangent
 
     VS_OUT output;
     output.position = projPos;
+    output.worldPos = worldPos;
     output.cameraPos = cameraPos.xyz;
     output.texCoord = texCoords;
     output.TBN = TBN;

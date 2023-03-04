@@ -1,5 +1,6 @@
 struct VS_OUT{
     float4 position: SV_Position;
+    float4 worldPos: WorldPos;
     float3 cameraPos: CameraPos;
     float2 texCoords: TexCoords;
     matrix<float, 3, 3> TBN: TBNMatrix;
@@ -33,7 +34,7 @@ PS_OUT main(VS_OUT vsOutput){
     float ao = aoTex.Sample(splr, texCoords).x;
 
     PS_OUT output;
-    output.gPositions = vsOutput.position;
+    output.gPositions = vsOutput.worldPos;
     output.gNormals = float4(N, 0.0f);
     output.gAlbedo = color;
     output.gMrao = float4(metallic, roughness, ao, 0.0f);
