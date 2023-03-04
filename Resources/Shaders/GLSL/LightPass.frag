@@ -6,8 +6,6 @@ in Resource{
 } res;
 
 layout(location = 0) out vec4 fragColor;
-layout(location = 1) out vec4 debug1;
-layout(location = 2) out vec4 debug2;
 
 layout(binding = 0) uniform sampler2D positions;
 layout(binding = 1) uniform sampler2D normals;
@@ -94,6 +92,4 @@ void main(){
     color = pow(color, vec3(1.0/2.2));
 
     fragColor = vec4(color, 1.0);
-    debug1 = vec4(viewDir, 1.0);
-    debug2 = vec4(position, 1.0);
 }

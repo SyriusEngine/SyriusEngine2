@@ -19,8 +19,6 @@ struct VS_OUT {
 
 struct PS_OUT {
     float4 color : SV_Target0;
-    float4 debug1 : SV_Target1;
-    float4 debug2 : SV_Target2;
 };
 
 static const float PI = 3.14159265359f;
@@ -56,6 +54,7 @@ float3 fresnelSchlick(float cosTheta, float3 f0)
 }
 
 PS_OUT main(VS_OUT vsOut) {
+    PS_OUT psOut;
     float2 texCoord = vsOut.texCoords;
     texCoord.y = 1.0 - texCoord.y;
     float3 position = positions.Sample(splr, texCoord).xyz;
@@ -100,9 +99,6 @@ PS_OUT main(VS_OUT vsOut) {
     color = color / (color + float3(1.0, 1.0, 1.0));
     color = pow(abs(color), float3(1.0 / 2.2, 1.0 / 2.2, 1.0 / 2.2));
 
-    PS_OUT psOut;
     psOut.color = float4(color, 1.0);
-    psOut.debug1 = float4(viewDir, 1.0);
-    psOut.debug2 = float4(position, 1.0);
     return psOut;
 }
