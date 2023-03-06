@@ -16,49 +16,15 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    MaterialDesc rustedIronDesc("./Resources/Textures/RustedIron/rustediron2_basecolor.png",
-                         "./Resources/Textures/RustedIron/rustediron2_normal.png",
-                         "./Resources/Textures/RustedIron/rustediron2_metallic.png",
-                         "./Resources/Textures/RustedIron/rustediron2_roughness.png"
-                         );
-
-    MaterialDesc chippedPaintMetalDesc("./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_basecolor.png",
-                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_normal.png",
-                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_metallic.png",
-                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_roughness.png",
-                            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_ao.png"
-            );
-
-    MaterialDesc spaceCruiserPanelsDesc("./Resources/Textures/SpaceCruiserPanels2/space-cruiser-panels2_basecolor.png",
-                            "./Resources/Textures/SpaceCruiserPanels2/space-cruiser-panels2_normal.png",
-                            "./Resources/Textures/SpaceCruiserPanels2/space-cruiser-panels2_metallic.png",
-                            "./Resources/Textures/SpaceCruiserPanels2/space-cruiser-panels2_roughness.png",
-                            "./Resources/Textures/SpaceCruiserPanels2/space-cruiser-panels2_ao.png"
-            );
-
-    auto rustedIron = m_Engine->createMaterial(rustedIronDesc);
-    auto chippedPaintMetal = m_Engine->createMaterial(chippedPaintMetalDesc);
-    auto spaceCruiserPanels = m_Engine->createMaterial(spaceCruiserPanelsDesc);
-
 
     m_Model = m_Engine->createEntity();
-    m_Engine->addModelComponent(m_Model);
-    auto& modelComp = m_Engine->getModelComponent(m_Model);
-    auto rustedIronSphere = modelComp.addSphere(32, 32);
-    rustedIronSphere->setMaterial(rustedIron);
-    rustedIronSphere->setTranslate({-2.0f, 0.0f, 2.0f});
+//    m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
+    m_Engine->addModelComponent(m_Model, "./Resources/Models/Sponza/Sponza.gltf");
 
-    auto chippedPaintMetalSphere = modelComp.addSphere(32, 32);
-    chippedPaintMetalSphere->setMaterial(chippedPaintMetal);
-    chippedPaintMetalSphere->setTranslate({2.0f, 0.0f, 2.0f});
-
-    auto spaceCruiserPanelsSphere = modelComp.addSphere(32, 32);
-    spaceCruiserPanelsSphere->setMaterial(spaceCruiserPanels);
-    spaceCruiserPanelsSphere->setTranslate({0.0f, 0.0f, -2.0f});
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
-    l1Desc.position = {0.0f, 3.0f, 0.0f};
+    l1Desc.position = {0.0f, 8.0f, 0.0f};
     l1Desc.color = {255.0f, 255.0f, 255.0f};
     m_Engine->addLightComponent(light1, l1Desc);
 

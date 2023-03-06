@@ -3,6 +3,7 @@
 #include "../../include/SyriusEngine/SyriusEngine.hpp"
 #include "LayerStack.hpp"
 #include "Renderer/Renderer.hpp"
+#include "ECS/ModelFromFile.hpp"
 
 namespace Syrius{
 
@@ -31,6 +32,8 @@ namespace Syrius{
         void removeCameraComponent(EntityID eid) override;
 
         void addModelComponent(EntityID eid) override;
+
+        void addModelComponent(EntityID eid, const std::string& modelPath) override;
 
         [[nodiscard]] ModelComponent& getModelComponent(EntityID eid) override;
 

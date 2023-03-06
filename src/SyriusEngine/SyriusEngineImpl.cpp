@@ -78,6 +78,10 @@ namespace Syrius{
         m_ECS->addComponent<ModelComponent>(eid, m_Renderer->getPBRenderLayer());
     }
 
+    void SyriusEngineImpl::addModelComponent(EntityID eid, const std::string &modelPath) {
+        m_ECS->addComponent<ModelFromFile>(eid, m_Renderer->getPBRenderLayer(), modelPath);
+    }
+
     ModelComponent &SyriusEngineImpl::getModelComponent(EntityID eid) {
         return m_ECS->getComponent<ModelComponent>(eid);
     }

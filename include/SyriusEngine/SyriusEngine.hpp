@@ -43,6 +43,8 @@ namespace Syrius{
 
         virtual void addModelComponent(EntityID eid) = 0;
 
+        virtual void addModelComponent(EntityID eid, const std::string& modelPath) = 0;
+
         [[nodiscard]] virtual ModelComponent& getModelComponent(EntityID eid) = 0;
 
         virtual void removeModelComponent(EntityID eid) = 0;

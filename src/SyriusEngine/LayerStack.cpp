@@ -20,7 +20,6 @@ namespace Syrius{
         renderLayer->onAttach();
         m_RenderLayers.push_back(renderLayer);
         m_Layers.push_back(renderLayer);
-
     }
 
     void LayerStack::popLayer(uint32 popCount) {
