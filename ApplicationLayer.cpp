@@ -20,19 +20,8 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    MaterialDesc chippedPaintMetalDesc(
-            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_basecolor.png",
-            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_normal.png",
-            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_metallic.png",
-            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_roughness.png",
-            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_ao.png"
-    );
-    MaterialID chippedPaintMetal = m_Engine->createMaterial(chippedPaintMetalDesc);
-
     m_Model = m_Engine->createEntity();
-    m_Engine->addModelComponent(m_Model);
-    m_Engine->getModelComponent(m_Model).addSphere(32, 32);
-    m_Engine->getModelComponent(m_Model).setMaterial(chippedPaintMetal);
+    m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
 
 
     auto light1 = m_Engine->createEntity();
@@ -104,7 +93,12 @@ ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> 
     m_Engine->getInternalWindow()->onImGuiBegin();
 
     ImGui::Begin("Syrius Engine");
-    ImGui::Text("FPS: %f", 1000.0f / m_DeltaTime);
+    auto frameTime = static_cast<float>(m_DeltaTime);
+    ImColor color = ImColor(255, 255, 255);
+    if (frameTime > 16.666f){
+        color = ImColor(255, 0, 0);
+    }
+    ImGui::TextColored(color, "Frame Time: %f", frameTime);
     ImGui::End();
     m_Engine->getInternalWindow()->onImGuiEnd();
     return framebuffer;

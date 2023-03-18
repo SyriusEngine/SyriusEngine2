@@ -89,25 +89,25 @@ namespace Syrius{
             albedoPath = filename;
             hash += filename;
         }
-        if (material->GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS) {
+        else if (material->GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS) {
             std::string filename = std::string(path.C_Str());
             filename = m_FilePath + '/' + filename;
             normalPath = filename;
             hash += filename;
         }
-        if (material->GetTexture(aiTextureType_METALNESS, 0, &path) == AI_SUCCESS) {
+        else if (material->GetTexture(aiTextureType_METALNESS, 0, &path) == AI_SUCCESS) {
             std::string filename = std::string(path.C_Str());
             filename = m_FilePath + '/' + filename;
             metallicPath = filename;
             hash += filename;
         }
-        if (material->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &path) == AI_SUCCESS) {
+        else if (material->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &path) == AI_SUCCESS) {
             std::string filename = std::string(path.C_Str());
             filename = m_FilePath + '/' + filename;
             roughnessPath = filename;
             hash += filename;
         }
-        if (material->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &path) == AI_SUCCESS) {
+        else if (material->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &path) == AI_SUCCESS) {
             std::string filename = std::string(path.C_Str());
             filename = m_FilePath + '/' + filename;
             aoPath = filename;

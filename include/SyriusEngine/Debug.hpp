@@ -72,7 +72,7 @@ namespace Syrius{
     Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_INFO, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
 
 #define SR_MESSAGE_WARNING(source, message, ...) \
-    Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_MEIDUM, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
+    Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_MEDIUM, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);
 
 #define SR_MESSAGE_EXCEPTION(source, message, ...) \
     Syrius::MessageHandler::pushMessage(message, source, Syrius::SR_MESSAGE_SEVERITY::SR_MESSAGE_SEVERITY_HIGH, SR_CORE_FILE, SR_CORE_FUNC, SR_CORE_LINE, ##__VA_ARGS__);

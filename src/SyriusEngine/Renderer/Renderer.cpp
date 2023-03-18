@@ -12,6 +12,7 @@ namespace Syrius{
             ContextDesc contextDesc;
             contextDesc.api = rendererDesc.api;
             m_Context = m_Window->createContext(contextDesc);
+            m_Context->setVerticalSynchronisation(true);
 
             SamplerDesc splrDesc;
             m_Sampler = m_Context->createSampler(splrDesc);
