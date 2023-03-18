@@ -4,7 +4,7 @@
 
 using namespace Syrius;
 
-class ApplicationLayer: public Layer{
+class ApplicationLayer: public RenderLayer{
 public:
     explicit ApplicationLayer(UP<SyriusEngine>& engine);
 
@@ -17,6 +17,8 @@ public:
     void onUpdate() override;
 
     bool onEvent(const Event& event) override;
+
+    ResourceView<FrameBuffer>& onRender(ResourceView<FrameBuffer>& framebuffer) override;
 
 private:
     UP<SyriusEngine>& m_Engine;

@@ -1,6 +1,7 @@
 #include "ApplicationLayer.hpp"
 
 ApplicationLayer::ApplicationLayer(UP<SyriusEngine> &engine):
+RenderLayer(engine->getRenderContext()),
 m_Engine(engine),
 m_Player(0),
 m_DeltaTime(1.0f),
@@ -13,13 +14,25 @@ ApplicationLayer::~ApplicationLayer() {
 }
 
 void ApplicationLayer::onAttach() {
+    m_RenderThread.pushTask([this](){
+        m_Engine->getInternalWindow()->createImGuiContext();
+    });
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
+    MaterialDesc chippedPaintMetalDesc(
+            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_basecolor.png",
+            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_normal.png",
+            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_metallic.png",
+            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_roughness.png",
+            "./Resources/Textures/ChippedPaintMetal/chipped-paint-metal_ao.png"
+    );
+    MaterialID chippedPaintMetal = m_Engine->createMaterial(chippedPaintMetalDesc);
 
     m_Model = m_Engine->createEntity();
-//    m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
-    m_Engine->addModelComponent(m_Model, "./Resources/Models/Sponza/Sponza.gltf");
+    m_Engine->addModelComponent(m_Model);
+    m_Engine->getModelComponent(m_Model).addSphere(32, 32);
+    m_Engine->getModelComponent(m_Model).setMaterial(chippedPaintMetal);
 
 
     auto light1 = m_Engine->createEntity();
@@ -84,4 +97,15 @@ bool ApplicationLayer::onEvent(const Event &event) {
     }
 
     return true;
+}
+
+ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> &framebuffer) {
+    framebuffer->bind();
+    m_Engine->getInternalWindow()->onImGuiBegin();
+
+    ImGui::Begin("Syrius Engine");
+    ImGui::Text("FPS: %f", 1000.0f / m_DeltaTime);
+    ImGui::End();
+    m_Engine->getInternalWindow()->onImGuiEnd();
+    return framebuffer;
 }

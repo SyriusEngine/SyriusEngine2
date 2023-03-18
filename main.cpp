@@ -11,7 +11,7 @@ void runEngine(SR_SUPPORTED_API api, uint32 width, uint32 height, int32 x, int32
     desc.window.title = "SyriusEngine - " + Syrius::getAPIName(api);
     auto engine = createEngine(desc);
     auto appLayer = createRCP<ApplicationLayer>(engine);
-    engine->pushLayer(appLayer);
+    engine->pushRenderLayer(appLayer);
     engine->run();
 }
 
@@ -20,11 +20,11 @@ int main() {
     init();
 
     try{
-        std::thread t1(runEngine, SR_SUPPORTED_API::SR_API_OPENGL, 1280, 720, 0, 0);
-        std::thread t2(runEngine, SR_SUPPORTED_API::SR_API_D3D11, 1280, 720, 1280, 0);
+        std::thread t1(runEngine, SR_SUPPORTED_API::SR_API_D3D11, 1280, 720, 0, 0);
+//        std::thread t2(runEngine, SR_SUPPORTED_API::SR_API_D3D11, 1280, 720, 1280, 0);
 
         t1.join();
-        t2.join();
+//        t2.join();
 
 
     } catch (std::exception& e) {
