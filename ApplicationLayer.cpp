@@ -20,9 +20,18 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    m_Model = m_Engine->createEntity();
-    m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
+    MaterialDesc ChippedPaintMetalDesc(
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_basecolor.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_normal.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_metallic.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_roughness.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_ao.png"
+            );
+    MaterialID ChippedPaintMetalID = m_Engine->createMaterial(ChippedPaintMetalDesc);
 
+    m_Model = m_Engine->createEntity();
+    m_Engine->addModelComponent(m_Model);
+    m_Engine->getModelComponent(m_Model).addSphere(32, 32)->setMaterial(ChippedPaintMetalID);
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
