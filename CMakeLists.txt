@@ -14,9 +14,9 @@ include_directories(./Dependencies/assimp/include)
 set(ECS_SRC
         src/SyriusEngine/ECS/CameraComponent.cpp
         src/SyriusEngine/ECS/ModelComponent.cpp
-        src/SyriusEngine/ECS/MeshComponent.cpp
+        src/SyriusEngine/ECS/Mesh/MeshComponent.cpp
         src/SyriusEngine/ECS/LightComponent.cpp
-        src/SyriusEngine/ECS/Builtins.cpp)
+        src/SyriusEngine/ECS/Mesh/Builtins.cpp src/SyriusEngine/ECS/Mesh/ModelLoader.cpp src/SyriusEngine/ECS/Mesh/ModelLoader.hpp)
 
 set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp

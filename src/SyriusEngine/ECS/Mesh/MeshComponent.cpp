@@ -1,5 +1,5 @@
 #include "MeshComponent.hpp"
-#include "../Renderer/PBRenderLayer/PBRenderLayer.hpp"
+#include "../../Renderer/PBRenderLayer/PBRenderLayer.hpp"
 
 namespace Syrius{
 

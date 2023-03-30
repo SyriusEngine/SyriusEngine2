@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../include/SyriusEngine/Renderer/Primitives.hpp"
-#include "../../../include/SyriusEngine/ECS/ModelComponent.hpp"
+#include "../../../../include/SyriusEngine/Renderer/Primitives.hpp"
+#include "../../../../include/SyriusEngine/ECS/ModelComponent.hpp"
 
 namespace Syrius{
 

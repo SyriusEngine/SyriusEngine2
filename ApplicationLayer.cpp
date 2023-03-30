@@ -14,9 +14,6 @@ ApplicationLayer::~ApplicationLayer() {
 }
 
 void ApplicationLayer::onAttach() {
-    m_RenderThread.pushTask([this](){
-        m_Engine->getInternalWindow()->createImGuiContext();
-    });
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
@@ -31,7 +28,9 @@ void ApplicationLayer::onAttach() {
 
     m_Model = m_Engine->createEntity();
     m_Engine->addModelComponent(m_Model);
-    m_Engine->getModelComponent(m_Model).addSphere(32, 32)->setMaterial(ChippedPaintMetalID);
+    auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
+    sphere->setMaterial(ChippedPaintMetalID);
+    sphere->setTranslate({0.0f, 0.0f, 3.0f});
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
@@ -42,6 +41,7 @@ void ApplicationLayer::onAttach() {
 }
 
 void ApplicationLayer::onDetach() {
+
 
 }
 
@@ -98,17 +98,6 @@ bool ApplicationLayer::onEvent(const Event &event) {
 }
 
 ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> &framebuffer) {
-    framebuffer->bind();
-    m_Engine->getInternalWindow()->onImGuiBegin();
 
-    ImGui::Begin("Syrius Engine");
-    auto frameTime = static_cast<float>(m_DeltaTime);
-    ImColor color = ImColor(255, 255, 255);
-    if (frameTime > 16.666f){
-        color = ImColor(255, 0, 0);
-    }
-    ImGui::TextColored(color, "Frame Time: %f", frameTime);
-    ImGui::End();
-    m_Engine->getInternalWindow()->onImGuiEnd();
     return framebuffer;
 }
