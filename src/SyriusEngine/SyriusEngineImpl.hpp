@@ -3,6 +3,7 @@
 #include "../../include/SyriusEngine/SyriusEngine.hpp"
 #include "LayerStack.hpp"
 #include "Renderer/Renderer.hpp"
+#include "ECS/Mesh/ModelLoader.hpp"
 
 namespace Syrius{
 

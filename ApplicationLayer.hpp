@@ -21,6 +21,13 @@ public:
     ResourceView<FrameBuffer>& onRender(ResourceView<FrameBuffer>& framebuffer) override;
 
 private:
+
+    void onAttachSphere();
+
+    void onAttachBackpackGuitar();
+
+private:
+
     UP<SyriusEngine>& m_Engine;
 
     double m_DeltaTime;

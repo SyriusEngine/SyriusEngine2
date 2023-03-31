@@ -20,11 +20,11 @@ namespace Syrius{
 
     private:
 
-        void processNode(aiNode* node, RCP<ModelComponent> model);
+        void processNode(aiNode* node, const RCP<ModelComponent>& model);
 
-        void processMesh(aiMesh* mesh);
+        void processMesh(aiMesh* mesh, MeshDesc& desc); // pass via reference to avoid copying when returning
 
-        void processMaterial(aiMaterial* material, MaterialID& matid);
+        MaterialID processMaterial(aiMaterial* material);
 
     private:
         SyriusEngine* m_Engine;

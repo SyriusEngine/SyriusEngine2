@@ -17,20 +17,8 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    MaterialDesc ChippedPaintMetalDesc(
-            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_basecolor.png",
-            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_normal.png",
-            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_metallic.png",
-            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_roughness.png",
-            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_ao.png"
-            );
-    MaterialID ChippedPaintMetalID = m_Engine->createMaterial(ChippedPaintMetalDesc);
-
-    m_Model = m_Engine->createEntity();
-    m_Engine->addModelComponent(m_Model);
-    auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
-    sphere->setMaterial(ChippedPaintMetalID);
-    sphere->setTranslate({0.0f, 0.0f, 3.0f});
+    //onAttachSphere();
+    onAttachBackpackGuitar();
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
@@ -100,4 +88,27 @@ bool ApplicationLayer::onEvent(const Event &event) {
 ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> &framebuffer) {
 
     return framebuffer;
+}
+
+void ApplicationLayer::onAttachSphere() {
+    MaterialDesc ChippedPaintMetalDesc(
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_basecolor.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_normal.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_metallic.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_roughness.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_ao.png"
+    );
+    MaterialID ChippedPaintMetalID = m_Engine->createMaterial(ChippedPaintMetalDesc);
+
+    m_Model = m_Engine->createEntity();
+    m_Engine->addModelComponent(m_Model);
+    auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
+    sphere->setMaterial(ChippedPaintMetalID);
+    sphere->setTranslate({0.0f, 0.0f, 3.0f});
+}
+
+void ApplicationLayer::onAttachBackpackGuitar() {
+    m_Model = m_Engine->createEntity();
+    m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
+
 }

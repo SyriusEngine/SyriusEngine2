@@ -79,8 +79,7 @@ namespace Syrius{
     }
 
     void SyriusEngineImpl::addModelComponent(EntityID eid, const std::string &modelPath) {
-        SR_MESSAGE_WARNING(SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL , "Creating a ModelFromFile component, this is not recommended, use ModelComponent instead");
-
+        ModelLoader loader(this, modelPath, eid);
     }
 
     ModelComponent &SyriusEngineImpl::getModelComponent(EntityID eid) {

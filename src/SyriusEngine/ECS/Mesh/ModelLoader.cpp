@@ -33,17 +33,54 @@ namespace Syrius{
         processNode(m_Scene->mRootNode, modelPtr);
     }
 
-    void ModelLoader::processNode(aiNode *node, RCP<ModelComponent> model) {
+    void ModelLoader::processNode(aiNode *node, const RCP<ModelComponent>& model) {
+        for (uint32 i = 0; i < node->mNumMeshes; i++){
+            MeshDesc desc;
+            aiMesh* mesh = m_Scene->mMeshes[node->mMeshes[i]];
+            processMesh(mesh, desc);
+            model->addSubMesh(desc);
+        }
 
-
-
+        for (uint32 i = 0; i < node->mNumChildren; i++){
+            auto subModel = model->addSubModel();
+            processNode(node->mChildren[i], subModel);
+        }
     }
 
-    void ModelLoader::processMesh(aiMesh *mesh) {
+    void ModelLoader::processMesh(aiMesh *mesh, MeshDesc& desc) {
+        desc.vertices.reserve(mesh->mNumVertices);
+        desc.indices.reserve(mesh->mNumFaces * 3);
 
+        for (uint32 i = 0; i < mesh->mNumVertices; i++) {
+            Vertex vertex;
+            vertex.position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+            if (mesh->HasNormals()){
+                vertex.normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+            }
+            if (mesh->HasTangentsAndBitangents()){
+                vertex.tangent = glm::vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+            }
+            if (mesh->HasTextureCoords(0)){
+                vertex.texCoord = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+            }
+            else{
+                vertex.texCoord = glm::vec2(0.0f, 0.0f);
+            }
+            desc.vertices.push_back(vertex);
+        }
+
+        for (uint32 i = 0; i < mesh->mNumFaces; i++) {
+            aiFace face = mesh->mFaces[i];
+            for (uint32 j = 0; j < face.mNumIndices; j++) {
+                desc.indices.push_back(face.mIndices[j]);
+            }
+        }
+
+        desc.materialID = processMaterial(m_Scene->mMaterials[mesh->mMaterialIndex]);
     }
 
-    void ModelLoader::processMaterial(aiMaterial *material, MaterialID &matid) {
-
+    MaterialID ModelLoader::processMaterial(aiMaterial *material) {
+        return 0;
     }
+
 }
