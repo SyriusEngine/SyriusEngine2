@@ -34,5 +34,7 @@ namespace Syrius{
 
         const aiScene* m_Scene;
 
+        std::unordered_map<aiMaterial*, MaterialID> m_Materials;
+
     };
 }

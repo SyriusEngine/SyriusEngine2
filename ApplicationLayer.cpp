@@ -109,6 +109,19 @@ void ApplicationLayer::onAttachSphere() {
 
 void ApplicationLayer::onAttachBackpackGuitar() {
     m_Model = m_Engine->createEntity();
-    m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
+    //m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
+    m_Engine->addModelComponent(m_Model, "./Resources/Models/Cerberus/Cerberus_LP.fbx");
+    m_Engine->getModelComponent(m_Model).setRotate({0.0f, 0.0f, 0.0f});
+    m_Engine->getModelComponent(m_Model).setScale({0.1f, 0.1f, 0.1f});
+
+    MaterialDesc cerberusDesc(
+            "./Resources/Models/Cerberus/Cerberus_A.jpg",
+            "./Resources/Models/Cerberus/Cerberus_N.jpg",
+            "./Resources/Models/Cerberus/Cerberus_M.jpg",
+            "./Resources/Models/Cerberus/Cerberus_R.jpg",
+            ""
+    );
+    MaterialID cerberusID = m_Engine->createMaterial(cerberusDesc);
+    m_Engine->getModelComponent(m_Model).setMaterial(cerberusID);
 
 }

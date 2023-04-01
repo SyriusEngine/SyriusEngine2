@@ -80,7 +80,30 @@ namespace Syrius{
     }
 
     MaterialID ModelLoader::processMaterial(aiMaterial *material) {
-        return 0;
+        if (m_Materials.find(material) != m_Materials.end()){
+            return m_Materials[material];
+        }
+        else{
+            auto loadTexture = [&](aiTextureType type){
+                aiString path;
+                if (material->GetTexture(type, 0, &path) == AI_SUCCESS){
+                    return m_Path + "/" + path.C_Str();
+                }
+                else{
+                    return std::string();
+                }
+            };
+            MaterialDesc desc(
+                    loadTexture(aiTextureType_BASE_COLOR),
+                    loadTexture(aiTextureType_NORMALS),
+                    loadTexture(aiTextureType_METALNESS),
+                    loadTexture(aiTextureType_DIFFUSE_ROUGHNESS),
+                    loadTexture(aiTextureType_AMBIENT_OCCLUSION)
+                    );
+            auto newMaterialID = m_Engine->createMaterial(desc);
+            m_Materials[material] = newMaterialID;
+            return newMaterialID;
+        }
     }
 
 }
