@@ -10,7 +10,7 @@ namespace Syrius{
         ColorAttachmentDesc f32Attachment;
         f32Attachment.width = vpDesc.width;
         f32Attachment.height = vpDesc.height;
-        f32Attachment.format = SR_TEXTURE_DATA_FORMAT_RGBA_F32;
+        f32Attachment.format = SR_TEXTURE_RGBA_F32;
 
         DepthStencilAttachmentDesc dsaDesc;
         dsaDesc.width = vpDesc.width;
