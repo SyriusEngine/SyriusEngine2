@@ -17,8 +17,8 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    //onAttachSphere();
-    onAttachBackpackGuitar();
+    onAttachSphere();
+    //onAttachBackpackGuitar();
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
