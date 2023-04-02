@@ -16,7 +16,8 @@ set(ECS_SRC
         src/SyriusEngine/ECS/ModelComponent.cpp
         src/SyriusEngine/ECS/Mesh/MeshComponent.cpp
         src/SyriusEngine/ECS/LightComponent.cpp
-        src/SyriusEngine/ECS/Mesh/Builtins.cpp src/SyriusEngine/ECS/Mesh/ModelLoader.cpp src/SyriusEngine/ECS/Mesh/ModelLoader.hpp)
+        src/SyriusEngine/ECS/Mesh/Builtins.cpp
+        src/SyriusEngine/ECS/Mesh/ModelLoader.cpp)
 
 set(RENDERER_SRC
         src/SyriusEngine/Renderer/Primitives.cpp
