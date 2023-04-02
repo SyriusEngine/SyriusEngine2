@@ -53,5 +53,14 @@ namespace Syrius{
         fillTexture(roughness, roughnessPath, zeroVec);
         fillTexture(ao, aoPath, zeroVec);
     }
+
+    MaterialDesc::MaterialDesc(Resource<Image> albedo, Resource<Image> normal, Resource<Image> metallic, Resource<Image> roughness, Resource<Image> ao):
+    albedo(std::move(albedo)),
+    normal(std::move(normal)),
+    metallic(std::move(metallic)),
+    roughness(std::move(roughness)),
+    ao(std::move(ao)){
+
+    }
 }
 

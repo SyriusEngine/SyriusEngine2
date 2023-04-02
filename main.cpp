@@ -20,11 +20,7 @@ int main() {
     init();
 
     try{
-        //std::thread t1(runEngine, SR_SUPPORTED_API::SR_API_OPENGL, 1280, 720, 0, 0);
-        std::thread t2(runEngine, SR_SUPPORTED_API::SR_API_D3D11, 1280, 720, 1280, 0);
-
-        //t1.join();
-        t2.join();
+        runEngine(Syrius::SR_API_D3D11, 1280, 720, 100, 100);
 
 
     } catch (std::exception& e) {

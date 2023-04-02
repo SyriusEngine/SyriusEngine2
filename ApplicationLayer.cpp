@@ -14,22 +14,28 @@ ApplicationLayer::~ApplicationLayer() {
 }
 
 void ApplicationLayer::onAttach() {
+    m_RenderThread.pushTask([this]{
+       m_Engine->getInternalWindow()->createImGuiContext();
+    });
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
     onAttachSphere();
     //onAttachBackpackGuitar();
+    //onAttachPbrSpheres();
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
-    l1Desc.position = {0.0f, 8.0f, 0.0f};
+    l1Desc.position = {0.0f, 8.0f, 1.0f};
     l1Desc.color = {255.0f, 255.0f, 255.0f};
     m_Engine->addLightComponent(light1, l1Desc);
 
 }
 
 void ApplicationLayer::onDetach() {
-
+    m_RenderThread.pushTask([this]{
+        m_Engine->getInternalWindow()->destroyImGuiContext();
+    });
 
 }
 
@@ -86,7 +92,9 @@ bool ApplicationLayer::onEvent(const Event &event) {
 }
 
 ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> &framebuffer) {
+    m_Engine->getInternalWindow()->onImGuiBegin();
 
+    m_Engine->getInternalWindow()->onImGuiEnd();
     return framebuffer;
 }
 
@@ -123,5 +131,38 @@ void ApplicationLayer::onAttachBackpackGuitar() {
     );
     MaterialID cerberusID = m_Engine->createMaterial(cerberusDesc);
     m_Engine->getModelComponent(m_Model).setMaterial(cerberusID);
+
+}
+
+void ApplicationLayer::onAttachPbrSpheres() {
+
+    uint8 maxX = 7;
+    uint8 maxY = 7;
+
+
+    for (uint8 x = 0; x < maxX; x++){
+        for (uint8 y = 0; y < maxY; y++){
+            auto modelEntity = m_Engine->createEntity();
+            m_Engine->addModelComponent(modelEntity);
+            auto model = m_Engine->getModelComponent(modelEntity);
+            auto sphere = model.addSphere(32, 32);
+            sphere->setTranslate({(float) x / (float) maxX, (float) y / (float) maxY, 0.0f});
+
+            ubyte semiRed[4] = {255, 0, 0, 255};
+            auto albedo = createImage(semiRed, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
+            ubyte normalVec[4] = {128, 128, 255, 255};
+            auto normal = createImage(normalVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
+            ubyte metallicVec[4] = { static_cast<ubyte>(x / maxX), static_cast<ubyte>(x / maxX), static_cast<ubyte>(x / maxX), 255};
+            auto metallic = createImage(metallicVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
+            ubyte roughnessVec[4] = {static_cast<ubyte>(y / maxY), static_cast<ubyte>(y / maxY), static_cast<ubyte>(y / maxY), 255};
+            auto roughness = createImage(roughnessVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
+            ubyte aoVec[4] = {255, 255, 255, 255};
+            auto ao = createImage(aoVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
+
+            MaterialDesc desc(std::move(albedo), std::move(normal), std::move(metallic), std::move(roughness), std::move(ao));
+            MaterialID id = m_Engine->createMaterial(desc);
+            sphere->setMaterial(id);
+        }
+    }
 
 }

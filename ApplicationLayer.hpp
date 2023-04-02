@@ -26,6 +26,8 @@ private:
 
     void onAttachBackpackGuitar();
 
+    void onAttachPbrSpheres();
+
 private:
 
     UP<SyriusEngine>& m_Engine;
@@ -35,5 +37,6 @@ private:
 
     EntityID m_Player;
     EntityID m_Model;
+    std::vector<EntityID> m_Models;
     bool m_UseCamera = false;
 };
