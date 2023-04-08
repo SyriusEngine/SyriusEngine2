@@ -135,33 +135,34 @@ void ApplicationLayer::onAttachBackpackGuitar() {
 }
 
 void ApplicationLayer::onAttachPbrSpheres() {
-
     uint8 maxX = 7;
     uint8 maxY = 7;
 
+    m_Model = m_Engine->createEntity();
+    m_Engine->addModelComponent(m_Model);
 
-    for (uint8 x = 0; x < maxX; x++){
-        for (uint8 y = 0; y < maxY; y++){
-            auto modelEntity = m_Engine->createEntity();
-            m_Engine->addModelComponent(modelEntity);
-            auto model = m_Engine->getModelComponent(modelEntity);
-            auto sphere = model.addSphere(32, 32);
-            sphere->setTranslate({(float) x / (float) maxX, (float) y / (float) maxY, 0.0f});
+    for (uint8 x = 0; x < maxX; x++) {
+        for (uint8 y = 0; y < maxY; y++) {
+            auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
 
             ubyte semiRed[4] = {255, 0, 0, 255};
             auto albedo = createImage(semiRed, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
             ubyte normalVec[4] = {128, 128, 255, 255};
             auto normal = createImage(normalVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
-            ubyte metallicVec[4] = { static_cast<ubyte>(x / maxX), static_cast<ubyte>(x / maxX), static_cast<ubyte>(x / maxX), 255};
+            ubyte metallicVec[4] = {static_cast<ubyte>(x / maxX), static_cast<ubyte>(x / maxX),
+                                    static_cast<ubyte>(x / maxX), 255};
             auto metallic = createImage(metallicVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
-            ubyte roughnessVec[4] = {static_cast<ubyte>(y / maxY), static_cast<ubyte>(y / maxY), static_cast<ubyte>(y / maxY), 255};
+            ubyte roughnessVec[4] = {static_cast<ubyte>(y / maxY), static_cast<ubyte>(y / maxY),
+                                     static_cast<ubyte>(y / maxY), 255};
             auto roughness = createImage(roughnessVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
             ubyte aoVec[4] = {255, 255, 255, 255};
             auto ao = createImage(aoVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
 
-            MaterialDesc desc(std::move(albedo), std::move(normal), std::move(metallic), std::move(roughness), std::move(ao));
+            MaterialDesc desc(std::move(albedo), std::move(normal), std::move(metallic), std::move(roughness),
+                              std::move(ao));
             MaterialID id = m_Engine->createMaterial(desc);
             sphere->setMaterial(id);
+            sphere->setTranslate({x * 2, y * 2, 3.0f});
         }
     }
 
