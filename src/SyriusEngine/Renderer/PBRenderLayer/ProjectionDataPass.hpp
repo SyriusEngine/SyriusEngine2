@@ -14,11 +14,11 @@ namespace Syrius{
         float m_Far     = 100.0f;
     };
 
-    class ProjectionPass : public ResourcePass{
+    class ProjectionDataPass : public ResourcePass{
     public:
-        ProjectionPass(ResourceView<Context>& context, const ProjectionDesc& desc);
+        ProjectionDataPass(ResourceView<Context>& context, const ProjectionDesc& desc);
 
-        ~ProjectionPass() override;
+        ~ProjectionDataPass() override;
 
         void onResize(uint32 width, uint32 height);
 

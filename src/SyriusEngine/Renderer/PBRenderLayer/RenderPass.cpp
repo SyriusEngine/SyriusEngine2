@@ -2,8 +2,8 @@
 
 namespace Syrius{
 
-    RenderPass::RenderPass(ResourceView<Context>& context, const ResourceView<FrameBufferDescription> &fbDesc)
-    : Pass(context),
+    RenderPass::RenderPass(ResourceView<Context>& context, const ResourceView<FrameBufferDescription> &fbDesc, PassType pType)
+    : Pass(context, NODE_CLASS_RENDER_PASS, NODE_SHADER, pType),
     m_VertexDescription(context->createVertexDescription()){
         m_FrameBuffer = m_Context->createFrameBuffer(fbDesc);
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../RenderGraph/Pass.hpp"
+#include "Pass.hpp"
 
 namespace Syrius{
 
@@ -8,7 +8,7 @@ namespace Syrius{
     public:
         ResourcePass() = delete;
 
-        ResourcePass(ResourceView<Context>& context, const ConstantBufferDesc& desc);
+        ResourcePass(ResourceView<Context>& context, const ConstantBufferDesc& desc, PassType pType);
 
         ~ResourcePass() override;
 

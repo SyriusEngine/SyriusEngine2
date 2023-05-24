@@ -1,4 +1,4 @@
-#include "ProjectionPass.hpp"
+#include "ProjectionDataPass.hpp"
 
 namespace Syrius{
 
@@ -22,41 +22,41 @@ namespace Syrius{
         return desc;
     }
 
-    ProjectionPass::ProjectionPass(ResourceView<Context>& context, const ProjectionDesc& pDesc)
-    : ResourcePass(context, createDesc(pDesc)),
+    ProjectionDataPass::ProjectionDataPass(ResourceView<Context>& context, const ProjectionDesc& pDesc)
+    : ResourcePass(context, createDesc(pDesc), PROJECTION_DATA_PASS),
     m_ProjectionDesc(pDesc){
         setProjectionData();
     }
 
-    ProjectionPass::~ProjectionPass() {
+    ProjectionDataPass::~ProjectionDataPass() {
 
     }
 
-    void ProjectionPass::onResize(uint32 width, uint32 height) {
+    void ProjectionDataPass::onResize(uint32 width, uint32 height) {
         m_ProjectionDesc.m_Width = static_cast<float>(width);
         m_ProjectionDesc.m_Height = static_cast<float>(height);
         setProjectionData();
     }
 
-    void ProjectionPass::setPosition(int32 xpos, int32 ypos) {
+    void ProjectionDataPass::setPosition(int32 xpos, int32 ypos) {
         m_ProjectionDesc.m_Xpos = static_cast<float>(xpos);
         m_ProjectionDesc.m_Ypos = static_cast<float>(ypos);
         setProjectionData();
 
     }
 
-    void ProjectionPass::setFOV(float fov) {
+    void ProjectionDataPass::setFOV(float fov) {
         m_ProjectionDesc.m_Fov = fov;
         setProjectionData();
     }
 
-    void ProjectionPass::setDepth(float near, float far) {
+    void ProjectionDataPass::setDepth(float near, float far) {
         m_ProjectionDesc.m_Near = near;
         m_ProjectionDesc.m_Far = far;
         setProjectionData();
     }
 
-    void ProjectionPass::setProjectionData() {
+    void ProjectionDataPass::setProjectionData() {
         ProjectionData pData;
         pData.m_Perspective = glm::perspective(m_ProjectionDesc.m_Fov, m_ProjectionDesc.m_Width / m_ProjectionDesc.m_Height, m_ProjectionDesc.m_Near, m_ProjectionDesc.m_Far);
         pData.m_Orthogonal = glm::ortho(m_ProjectionDesc.m_Xpos, m_ProjectionDesc.m_Width, m_ProjectionDesc.m_Ypos, m_ProjectionDesc.m_Height);

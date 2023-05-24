@@ -20,7 +20,7 @@ namespace Syrius{
     }
 
     CameraDataPass::CameraDataPass(ResourceView<Context>& context)
-    : ResourcePass(context, createDesc()) {
+    : ResourcePass(context, createDesc(), CAMERA_DATA_PASS) {
 
     }
 

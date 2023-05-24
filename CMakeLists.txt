@@ -26,15 +26,15 @@ set(RENDERER_SRC
         src/SyriusEngine/Renderer/RenderContext.cpp
         src/SyriusEngine/Renderer/ShaderLibrary.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/PBRenderLayer.cpp
-        src/SyriusEngine/Renderer/RenderGraph/Pass.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/Pass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/RenderPass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/ResourcePass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/CameraDataPass.cpp
-        src/SyriusEngine/Renderer/PBRenderLayer/ProjectionPass.cpp
+        src/SyriusEngine/Renderer/PBRenderLayer/ProjectionDataPass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/GeometryPass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/LightPass.cpp
-        src/SyriusEngine/Renderer/PBRenderLayer/RenderData.cpp
-        src/SyriusEngine/Renderer/PBRenderLayer/RenderData.hpp)
+        src/SyriusEngine/Renderer/RenderData.cpp
+        src/SyriusEngine/Renderer/RenderData.hpp)
 
 set(UTILS_SRC
         src/SyriusEngine/Utils/Worker.cpp)
@@ -47,7 +47,7 @@ set(SYRIUS_ENGINE_SRC
         src/SyriusEngine/Debug.cpp
         src/SyriusEngine/LayerStack.cpp
         src/SyriusEngine/Layer.cpp
-        src/SyriusEngine/SyriusEngineImpl.cpp)
+        src/SyriusEngine/SyriusEngineImpl.cpp src/SyriusEngine/Renderer/PBRenderLayer/RenderGraph.cpp src/SyriusEngine/Renderer/PBRenderLayer/RenderGraph.hpp)
 
 add_library(SyriusEngine SHARED ${SYRIUS_ENGINE_SRC})
 

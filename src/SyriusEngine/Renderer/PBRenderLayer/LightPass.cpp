@@ -20,11 +20,11 @@ namespace Syrius{
 
 
     LightPass::LightPass(const RenderData& renderData, RCP<GeometryPass>& geometryPass) :
-    RenderPass(renderData.context, createLightPassFramebufferDesc(renderData.context)),
+    RenderPass(renderData.context, createLightPassFramebufferDesc(renderData.context), LIGHTING_PASS),
     m_Sampler(renderData.defaultSampler),
     m_LightCount(0),
     m_GeometryPass(geometryPass){
-        addInput(m_GeometryPass);
+        addDependency(GEOMETRY_PASS);
 
         m_VertexDescription->addAttribute("Position", SR_FLOAT32_2);
         m_VertexDescription->addAttribute("TexCoords", SR_FLOAT32_2);
@@ -71,8 +71,6 @@ namespace Syrius{
     }
 
     void LightPass::execute() {
-        executeInputPasses();
-
         m_Context->beginRenderPass(m_FrameBuffer);
 
         m_Shader->bind();

@@ -2,7 +2,7 @@
 
 #include "../../../../include/SyriusEngine/Renderer/RenderLayer.hpp"
 #include "CameraDataPass.hpp"
-#include "ProjectionPass.hpp"
+#include "ProjectionDataPass.hpp"
 #include "GeometryPass.hpp"
 #include "LightPass.hpp"
 
@@ -44,7 +44,7 @@ namespace Syrius{
 
     private:
 
-        RCP<ProjectionPass> m_ProjectionPass;
+        RCP<ProjectionDataPass> m_ProjectionPass;
         RCP<CameraDataPass> m_CameraDataPass;
 
         RCP<GeometryPass> m_GeometryPass;

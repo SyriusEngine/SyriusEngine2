@@ -21,7 +21,7 @@ namespace Syrius{
             ProjectionDesc prDesc;
             prDesc.m_Width = static_cast<float>(m_Context->getWidth());
             prDesc.m_Height = static_cast<float>(m_Context->getHeight());
-            m_ProjectionPass = createRCP<ProjectionPass>(m_Context, prDesc);
+            m_ProjectionPass = createRCP<ProjectionDataPass>(m_Context, prDesc);
 
             m_GeometryPass = createRCP<GeometryPass>(renderData);
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../RenderGraph/Pass.hpp"
+#include "Pass.hpp"
 #include "../../../../include/SyriusEngine/Renderer/ShaderLibrary.hpp"
 
 namespace Syrius{
@@ -8,7 +8,7 @@ namespace Syrius{
     class RenderPass : public Pass{
     public:
 
-        RenderPass(ResourceView<Context>& context, const ResourceView<FrameBufferDescription>& fbDesc);
+        RenderPass(ResourceView<Context>& context, const ResourceView<FrameBufferDescription>& fbDesc, PassType pType);
 
         ~RenderPass() override;
 
