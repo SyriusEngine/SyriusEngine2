@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../../../include/SyriusEngine/Renderer/Primitives.hpp"
-#include "RenderData.hpp"
+#include "../PBRenderLayer/RenderData.hpp"
 
 namespace Syrius{
 

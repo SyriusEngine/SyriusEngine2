@@ -26,7 +26,7 @@ set(RENDERER_SRC
         src/SyriusEngine/Renderer/RenderContext.cpp
         src/SyriusEngine/Renderer/ShaderLibrary.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/PBRenderLayer.cpp
-        src/SyriusEngine/Renderer/PBRenderLayer/Pass.cpp
+        src/SyriusEngine/Renderer/RenderGraph/Pass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/RenderPass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/ResourcePass.cpp
         src/SyriusEngine/Renderer/PBRenderLayer/CameraDataPass.cpp
