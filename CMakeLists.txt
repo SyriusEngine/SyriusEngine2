@@ -35,7 +35,7 @@ set(RENDERER_SRC
         src/SyriusEngine/Renderer/PBRenderLayer/LightPass.cpp
         src/SyriusEngine/Renderer/RenderData.cpp
         src/SyriusEngine/Renderer/RenderData.hpp
-        src/SyriusEngine/Renderer/PBRenderLayer/RenderGraph.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightDataPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightDataPass.hpp)
+        src/SyriusEngine/Renderer/PBRenderLayer/RenderGraph.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightDataPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/LightDataPass.hpp src/SyriusEngine/Renderer/PBRenderLayer/SamplerPass.cpp src/SyriusEngine/Renderer/PBRenderLayer/SamplerPass.hpp)
 
 set(UTILS_SRC
         src/SyriusEngine/Utils/Worker.cpp)

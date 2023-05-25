@@ -16,8 +16,8 @@ namespace Syrius{
         return desc;
     }
 
-    LightDataPass::LightDataPass(const RenderData &renderData):
-    ResourcePass(renderData.context, createLightDataDesc(),LIGHT_DATA_PASS),
+    LightDataPass::LightDataPass(ResourceView<Context>& context):
+    ResourcePass(context, createLightDataDesc(), LIGHT_DATA_PASS),
     m_LightCount(0){
 
     }

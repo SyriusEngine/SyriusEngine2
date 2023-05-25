@@ -25,6 +25,7 @@ namespace Syrius{
     m_GeometryPass(geometryPass){
         addDependency(GEOMETRY_PASS);
         addDependency(LIGHT_DATA_PASS);
+        addDependency(LINEAR_FILTER_WRAP_REPEAT_SAMPLER_PASS);
 
         m_VertexDescription->addAttribute("Position", SR_FLOAT32_2);
         m_VertexDescription->addAttribute("TexCoords", SR_FLOAT32_2);

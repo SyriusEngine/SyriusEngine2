@@ -18,7 +18,8 @@ namespace Syrius{
             RenderData renderData(m_Context, m_DefaultSampler, m_ShaderLibrary);
 
             m_CameraDataPass = createRCP<CameraDataPass>(m_Context);
-            m_LightDataPass = createRCP<LightDataPass>(renderData);
+            m_LightDataPass = createRCP<LightDataPass>(m_Context);
+            m_SamplerPass = createRCP<LinearFilterWrapRepeatSamplerPass>(m_Context);
 
             ProjectionDesc prDesc;
             prDesc.m_Width = static_cast<float>(m_Context->getWidth());
@@ -33,6 +34,7 @@ namespace Syrius{
             m_RenderGraph.addPass(m_CameraDataPass->getPassDesc());
             m_RenderGraph.addPass(m_GeometryPass->getPassDesc());
             m_RenderGraph.addPass(m_LightDataPass->getPassDesc());
+            m_RenderGraph.addPass(m_SamplerPass->getPassDesc());
 
             m_RenderGraph.validate();
             m_RenderGraph.compile();
@@ -43,6 +45,8 @@ namespace Syrius{
         m_RenderThread.pushTaskSync([this]{
             m_LightPass.reset();
             m_GeometryPass.reset();
+            m_SamplerPass.reset();
+            m_LightDataPass.reset();
 
             m_ProjectionPass.reset();
             m_CameraDataPass.reset();

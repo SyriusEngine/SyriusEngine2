@@ -56,6 +56,10 @@ namespace Syrius{
     GeometryPass::GeometryPass(const RenderData& renderData):
     RenderPass(renderData.context, createGeometryPassFramebufferDesc(renderData.context), GEOMETRY_PASS),
     m_Sampler(renderData.defaultSampler){
+        addDependency(CAMERA_DATA_PASS);
+        addDependency(PROJECTION_DATA_PASS);
+        addDependency(LINEAR_FILTER_WRAP_REPEAT_SAMPLER_PASS);
+
         m_VertexDescription->addAttribute("Position", SR_FLOAT32_3);
         m_VertexDescription->addAttribute("Normal", SR_FLOAT32_3);
         m_VertexDescription->addAttribute("Tangent", SR_FLOAT32_3);
@@ -77,9 +81,6 @@ namespace Syrius{
 
         MaterialDesc defaultMaterial;
         m_Materials.emplace(0, m_Context, defaultMaterial, m_Sampler);
-
-        addDependency(CAMERA_DATA_PASS);
-        addDependency(PROJECTION_DATA_PASS);
     }
 
     GeometryPass::~GeometryPass() {

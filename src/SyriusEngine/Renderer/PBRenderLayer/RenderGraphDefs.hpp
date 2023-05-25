@@ -27,6 +27,7 @@ namespace Syrius{
         LIGHTING_PASS           = 0x04,
         SHADOW_PASS             = 0x05,
         GEOMETRY_PASS           = 0x06,
+        LINEAR_FILTER_WRAP_REPEAT_SAMPLER_PASS = 0x07,
     } PassType;
 
     struct PassDesc{

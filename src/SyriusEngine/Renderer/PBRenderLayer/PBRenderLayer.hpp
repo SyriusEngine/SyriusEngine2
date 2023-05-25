@@ -6,6 +6,7 @@
 #include "GeometryPass.hpp"
 #include "LightPass.hpp"
 #include "LightDataPass.hpp"
+#include "SamplerPass.hpp"
 
 #include "RenderGraph.hpp"
 
@@ -52,6 +53,7 @@ namespace Syrius{
         RCP<ProjectionDataPass> m_ProjectionPass;
         RCP<CameraDataPass> m_CameraDataPass;
         RCP<LightDataPass> m_LightDataPass;
+        RCP<LinearFilterWrapRepeatSamplerPass> m_SamplerPass;
 
         RCP<GeometryPass> m_GeometryPass;
         RCP<LightPass> m_LightPass;

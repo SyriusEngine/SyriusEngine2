@@ -12,7 +12,7 @@ namespace Syrius{
 
     class LightDataPass: public ResourcePass{
     public:
-        explicit LightDataPass(const RenderData& renderData);
+        explicit LightDataPass(ResourceView<Context>& context);
 
         ~LightDataPass() override;
 
