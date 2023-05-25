@@ -7,7 +7,7 @@ namespace Syrius{
         glm::vec4 m_CameraPosition  = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     };
 
-    ConstantBufferDesc createDesc(){
+    ConstantBufferDesc createCameraDataDesc(){
         ConstantBufferDesc desc;
         desc.name = "CameraData";
         desc.size = sizeof(CameraData);
@@ -20,7 +20,7 @@ namespace Syrius{
     }
 
     CameraDataPass::CameraDataPass(ResourceView<Context>& context)
-    : ResourcePass(context, createDesc(), CAMERA_DATA_PASS) {
+    : ResourcePass(context, createCameraDataDesc(), CAMERA_DATA_PASS) {
 
     }
 

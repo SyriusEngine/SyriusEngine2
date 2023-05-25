@@ -7,7 +7,7 @@ namespace Syrius{
         glm::mat4 m_Orthogonal = glm::mat4(1.0f);
     };
 
-    ConstantBufferDesc createDesc(const ProjectionDesc& pDesc){
+    ConstantBufferDesc createProjectionDataDesc(const ProjectionDesc& pDesc){
         ConstantBufferDesc desc;
         desc.name = "ProjectionData";
         desc.size = sizeof(ProjectionData);
@@ -23,7 +23,7 @@ namespace Syrius{
     }
 
     ProjectionDataPass::ProjectionDataPass(ResourceView<Context>& context, const ProjectionDesc& pDesc)
-    : ResourcePass(context, createDesc(pDesc), PROJECTION_DATA_PASS),
+    : ResourcePass(context, createProjectionDataDesc(pDesc), PROJECTION_DATA_PASS),
     m_ProjectionDesc(pDesc){
         setProjectionData();
     }

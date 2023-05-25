@@ -18,6 +18,7 @@ namespace Syrius{
             RenderData renderData(m_Context, m_DefaultSampler, m_ShaderLibrary);
 
             m_CameraDataPass = createRCP<CameraDataPass>(m_Context);
+            m_LightDataPass = createRCP<LightDataPass>(renderData);
 
             ProjectionDesc prDesc;
             prDesc.m_Width = static_cast<float>(m_Context->getWidth());
@@ -31,6 +32,7 @@ namespace Syrius{
             m_RenderGraph.addPass(m_LightPass->getPassDesc());
             m_RenderGraph.addPass(m_CameraDataPass->getPassDesc());
             m_RenderGraph.addPass(m_GeometryPass->getPassDesc());
+            m_RenderGraph.addPass(m_LightDataPass->getPassDesc());
 
             m_RenderGraph.validate();
             m_RenderGraph.compile();
@@ -123,14 +125,14 @@ namespace Syrius{
     LightID PBRenderLayer::createLight(const LightDesc &lightDesc) {
         LightID lid = 0;
         m_RenderThread.pushTaskSync([&lightDesc, &lid, this]{
-            lid = m_LightPass->createLight(lightDesc);
+            lid = m_LightDataPass->createLight(lightDesc);
         });
         return lid;
     }
 
     void PBRenderLayer::removeLight(LightID lightID) {
         m_RenderThread.pushTaskSync([lightID, this]{
-            m_LightPass->removeLight(lightID);
+            m_LightDataPass->removeLight(lightID);
         });
     }
 }

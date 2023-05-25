@@ -22,9 +22,9 @@ namespace Syrius{
     LightPass::LightPass(const RenderData& renderData, RCP<GeometryPass>& geometryPass) :
     RenderPass(renderData.context, createLightPassFramebufferDesc(renderData.context), LIGHTING_PASS),
     m_Sampler(renderData.defaultSampler),
-    m_LightCount(0),
     m_GeometryPass(geometryPass){
         addDependency(GEOMETRY_PASS);
+        addDependency(LIGHT_DATA_PASS);
 
         m_VertexDescription->addAttribute("Position", SR_FLOAT32_2);
         m_VertexDescription->addAttribute("TexCoords", SR_FLOAT32_2);
@@ -54,16 +54,6 @@ namespace Syrius{
         vaDesc.vertexShader = package.vertexShader;
         m_ScreenVAO = m_Context->createVertexArray(vaDesc);
 
-        ConstantBufferDesc cbDesc;
-        cbDesc.name = "LightData";
-        cbDesc.size = sizeof(LightData);
-        cbDesc.slot = 3;
-        LightData cData;
-        cbDesc.data = &cData;
-        cbDesc.type = SR_BUFFER_DYNAMIC;
-        cbDesc.shaderStage = SR_SHADER_FRAGMENT;
-        m_LightDataBuffer = m_Context->createConstantBuffer(cbDesc);
-
     }
 
     LightPass::~LightPass() {
@@ -74,40 +64,10 @@ namespace Syrius{
         m_Context->beginRenderPass(m_FrameBuffer);
 
         m_Shader->bind();
-        m_LightDataBuffer->bind();
-
         for (uint32 i = 0; i < 4; i++){
             m_GeometryPass->getFrameBuffer()->getColorAttachment(i)->bindShaderResource(i);
         }
         m_Context->draw(m_ScreenVAO);
         m_Context->endRenderPass(m_FrameBuffer);
-}
-
-    LightID LightPass::createLight(const LightDesc& desc) {
-        LightID lid = generateID();
-
-        m_LightData.m_Position[m_LightCount] = glm::vec4(desc.position, 1.0f);
-        m_LightData.m_Color[m_LightCount] = glm::vec4(desc.color, 1.0f);
-        m_LightData.m_LightCount[0]++;
-        m_KeyLightMap.insert({lid, m_LightCount});
-        m_LightCount++;
-
-        m_LightDataBuffer->setData(&m_LightData);
-
-        return lid;
-    }
-
-    void LightPass::removeLight(LightID index) {
-        auto lastIndex = m_LightCount - 1;
-        for (const auto& pair: m_KeyLightMap){
-            if (lastIndex == pair.second){
-                //switch current light with last light
-                m_LightData.m_Position[m_KeyLightMap[index]] = m_LightData.m_Position[lastIndex];
-                m_LightData.m_Color[m_KeyLightMap[index]] = m_LightData.m_Color[lastIndex];
-                //clear last light
-                m_LightData.m_Position[lastIndex] = glm::vec4(0.0f);
-                m_LightData.m_Color[lastIndex] = glm::vec4(0.0f);
-            }
-        }
     }
 }

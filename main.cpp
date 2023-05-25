@@ -20,7 +20,7 @@ int main() {
     init();
 
     try{
-        runEngine(Syrius::SR_API_OPENGL, 1280, 720, 100, 100);
+        runEngine(Syrius::SR_API_D3D11, 1280, 720, 100, 100);
 
 
     } catch (std::exception& e) {
