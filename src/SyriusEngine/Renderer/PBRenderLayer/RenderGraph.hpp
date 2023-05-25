@@ -5,6 +5,9 @@
 
 namespace Syrius{
 
+    typedef std::vector<PassType> Dependencies;
+    typedef std::unordered_map<PassType, Dependencies> AdjacencyList;
+
     class RenderGraph{
     public:
         RenderGraph();
@@ -18,6 +21,12 @@ namespace Syrius{
         void compile(); // topologically sorts the passes so that the dependencies are executed first
 
         void execute();
+
+    private:
+
+        void dfs(PassType passType, std::unordered_map<PassType, bool>& visited);
+
+
 
     private:
         std::unordered_map<PassType, PassDesc> m_Passes;

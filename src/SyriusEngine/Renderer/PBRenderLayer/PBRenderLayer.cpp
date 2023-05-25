@@ -3,7 +3,8 @@
 namespace Syrius{
 
     PBRenderLayer::PBRenderLayer(const UP<RenderContext> &renderContext) :
-    RenderLayer(renderContext) {
+    RenderLayer(renderContext),
+    m_RenderGraph(){
 
     }
 
@@ -24,11 +25,15 @@ namespace Syrius{
             m_ProjectionPass = createRCP<ProjectionDataPass>(m_Context, prDesc);
 
             m_GeometryPass = createRCP<GeometryPass>(renderData);
-
-            m_GeometryPass->addInput(m_ProjectionPass);
-            m_GeometryPass->addInput(m_CameraDataPass);
-
             m_LightPass = createRCP<LightPass>(renderData, m_GeometryPass);
+
+            m_RenderGraph.addPass(m_ProjectionPass->getPassDesc());
+            m_RenderGraph.addPass(m_LightPass->getPassDesc());
+            m_RenderGraph.addPass(m_CameraDataPass->getPassDesc());
+            m_RenderGraph.addPass(m_GeometryPass->getPassDesc());
+
+            m_RenderGraph.validate();
+            m_RenderGraph.compile();
         });
     }
 
@@ -61,7 +66,7 @@ namespace Syrius{
 
     ResourceView<FrameBuffer> &PBRenderLayer::onRender(ResourceView<FrameBuffer> &framebuffer) {
         m_DefaultSampler->bind(0);
-        m_LightPass->execute();
+        m_RenderGraph.execute();
         return m_LightPass->getFrameBuffer();
     }
 

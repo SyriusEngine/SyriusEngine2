@@ -6,6 +6,8 @@
 #include "GeometryPass.hpp"
 #include "LightPass.hpp"
 
+#include "RenderGraph.hpp"
+
 namespace Syrius{
 
     class PBRenderLayer: public RenderLayer{
@@ -43,6 +45,8 @@ namespace Syrius{
         void removeLight(LightID lightID);
 
     private:
+
+        RenderGraph m_RenderGraph;
 
         RCP<ProjectionDataPass> m_ProjectionPass;
         RCP<CameraDataPass> m_CameraDataPass;
