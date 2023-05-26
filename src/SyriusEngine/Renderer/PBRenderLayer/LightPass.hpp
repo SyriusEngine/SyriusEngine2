@@ -17,7 +17,6 @@ namespace Syrius{
         ResourceView<VertexArray> m_ScreenVAO;
         ResourceView<VertexBuffer> m_ScreenVBO;
         ResourceView<IndexBuffer> m_ScreenIBO;
-        ResourceView<Sampler>& m_Sampler;
 
         RCP<GeometryPass>& m_GeometryPass;
     };

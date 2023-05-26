@@ -19,7 +19,7 @@ namespace Syrius {
 
     class MaterialHandle{
     public:
-        MaterialHandle(ResourceView<Context>& context, const MaterialDesc& matDesc, ResourceView<Sampler>& sampler);
+        MaterialHandle(ResourceView<Context>& context, const MaterialDesc& matDesc);
 
         ~MaterialHandle();
 
@@ -60,7 +60,6 @@ namespace Syrius {
 
         ResourceView<ShaderModule> m_VertexShaderModule;
         ResourceView<ConstantBuffer> m_ModelData;
-        ResourceView<Sampler>& m_Sampler;
     };
 
 }

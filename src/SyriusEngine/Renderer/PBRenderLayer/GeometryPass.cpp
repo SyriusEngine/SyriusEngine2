@@ -29,17 +29,16 @@ namespace Syrius{
         return fbDesc;
     }
 
-    MaterialHandle::MaterialHandle(ResourceView<Context> &context, const MaterialDesc &matDesc,
-                                   ResourceView<Sampler> &sampler) {
-        auto createTexture = [&](ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image, ResourceView<Sampler>& sampler) {
-            Texture2DImageDesc desc(image, sampler);
+    MaterialHandle::MaterialHandle(ResourceView<Context> &context, const MaterialDesc &matDesc) {
+        auto createTexture = [&](ResourceView<Texture2D>& texture, ResourceView<Context>& context, const Resource<Image>& image) {
+            Texture2DImageDesc desc(image);
             texture = context->createTexture2D(desc);
         };
-        createTexture(m_Albedo, context, matDesc.albedo, sampler);
-        createTexture(m_Normal, context, matDesc.normal, sampler);
-        createTexture(m_Metallic, context, matDesc.metallic, sampler);
-        createTexture(m_Roughness, context, matDesc.roughness, sampler);
-        createTexture(m_Ao, context, matDesc.ao, sampler);
+        createTexture(m_Albedo, context, matDesc.albedo);
+        createTexture(m_Normal, context, matDesc.normal);
+        createTexture(m_Metallic, context, matDesc.metallic);
+        createTexture(m_Roughness, context, matDesc.roughness);
+        createTexture(m_Ao, context, matDesc.ao);
     }
 
     MaterialHandle::~MaterialHandle() = default;
@@ -54,8 +53,7 @@ namespace Syrius{
 
 
     GeometryPass::GeometryPass(const RenderData& renderData):
-    RenderPass(renderData.context, createGeometryPassFramebufferDesc(renderData.context), GEOMETRY_PASS),
-    m_Sampler(renderData.defaultSampler){
+    RenderPass(renderData.context, createGeometryPassFramebufferDesc(renderData.context), GEOMETRY_PASS){
         addDependency(CAMERA_DATA_PASS);
         addDependency(PROJECTION_DATA_PASS);
         addDependency(LINEAR_FILTER_WRAP_REPEAT_SAMPLER_PASS);
@@ -80,7 +78,7 @@ namespace Syrius{
         m_ModelData = m_Context->createConstantBuffer(cbDesc);
 
         MaterialDesc defaultMaterial;
-        m_Materials.emplace(0, m_Context, defaultMaterial, m_Sampler);
+        m_Materials.emplace(0, m_Context, defaultMaterial);
     }
 
     GeometryPass::~GeometryPass() {
@@ -141,7 +139,7 @@ namespace Syrius{
 
     MaterialID GeometryPass::createMaterial(const MaterialDesc &matDesc) {
         MaterialID materialID = generateID();
-        m_Materials.emplace(materialID, m_Context, matDesc, m_Sampler);
+        m_Materials.emplace(materialID, m_Context, matDesc);
         return materialID;
     }
 

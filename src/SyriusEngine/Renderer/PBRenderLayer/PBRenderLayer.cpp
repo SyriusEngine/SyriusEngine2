@@ -14,9 +14,6 @@ namespace Syrius{
 
     void PBRenderLayer::onAttach() {
         m_RenderThread.pushTaskSync([this]{
-
-            RenderData renderData(m_Context, m_DefaultSampler, m_ShaderLibrary);
-
             m_CameraDataPass = createRCP<CameraDataPass>(m_Context);
             m_LightDataPass = createRCP<LightDataPass>(m_Context);
             m_SamplerPass = createRCP<LinearFilterWrapRepeatSamplerPass>(m_Context);
@@ -26,6 +23,7 @@ namespace Syrius{
             prDesc.m_Height = static_cast<float>(m_Context->getHeight());
             m_ProjectionPass = createRCP<ProjectionDataPass>(m_Context, prDesc);
 
+            RenderData renderData(m_Context, m_ShaderLibrary);
             m_GeometryPass = createRCP<GeometryPass>(renderData);
             m_LightPass = createRCP<LightPass>(renderData, m_GeometryPass);
 

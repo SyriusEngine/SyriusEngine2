@@ -7,12 +7,11 @@ namespace Syrius{
 
     struct RenderData{
         ResourceView<Context>& context;
-        ResourceView<Sampler>& defaultSampler;
         UP<ShaderLibrary>& shaderLibrary;
 
         RenderData() = delete;
 
-        RenderData(ResourceView<Context>& context, ResourceView<Sampler>& defaultSampler, UP<ShaderLibrary>& shaderLibrary);
+        RenderData(ResourceView<Context>& context, UP<ShaderLibrary>& shaderLibrary);
 
         ~RenderData() = default;
     };

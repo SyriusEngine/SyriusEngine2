@@ -2,9 +2,8 @@
 
 namespace Syrius{
 
-    RenderData::RenderData(ResourceView<Context> &context, ResourceView<Sampler> &defaultSampler, UP<ShaderLibrary> &shaderLibrary):
+    RenderData::RenderData(ResourceView<Context> &context, UP<ShaderLibrary> &shaderLibrary):
     context(context),
-    defaultSampler(defaultSampler),
     shaderLibrary(shaderLibrary){
 
     }

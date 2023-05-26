@@ -21,7 +21,6 @@ namespace Syrius{
 
     LightPass::LightPass(const RenderData& renderData, RCP<GeometryPass>& geometryPass) :
     RenderPass(renderData.context, createLightPassFramebufferDesc(renderData.context), LIGHTING_PASS),
-    m_Sampler(renderData.defaultSampler),
     m_GeometryPass(geometryPass){
         addDependency(GEOMETRY_PASS);
         addDependency(LIGHT_DATA_PASS);
