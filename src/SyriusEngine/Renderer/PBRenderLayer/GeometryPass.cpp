@@ -93,7 +93,7 @@ namespace Syrius{
         for (const auto& data: m_Meshes){
             m_ModelData->setData(&data.transformation);
             m_Materials[data.materialID].bind();
-            m_Context->draw(data.vertexArray);
+            m_Context->drawInstanced(data.vertexArray, 1);
         }
         m_Context->endRenderPass(m_FrameBuffer);
     }
@@ -129,8 +129,8 @@ namespace Syrius{
 
     void GeometryPass::setMeshTransformation(MeshID mid, const glm::mat4 &modelMatrix) {
         auto& handle = m_Meshes[mid];
-        handle.transformation.modelMatrix = modelMatrix;
-        handle.transformation.normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+        handle.transformation[0].modelMatrix = modelMatrix;
+        handle.transformation[0].normalMatrix = glm::transpose(glm::inverse(modelMatrix));
     }
 
     void GeometryPass::removeMesh(MeshID mid) {

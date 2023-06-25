@@ -13,7 +13,7 @@ namespace Syrius {
         ResourceView<VertexBuffer> vertexBuffer;
         ResourceView<IndexBuffer> indexBuffer;
         ResourceView<VertexArray> vertexArray;
-        MeshTransformation transformation;
+        MeshTransformation transformation[300];
         MaterialID materialID = 0;
     };
 

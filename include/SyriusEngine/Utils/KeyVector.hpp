@@ -92,6 +92,10 @@ namespace Syrius{
             return m_Data.size();
         }
 
+        const std::vector<D>& getData() const{
+            return m_Data;
+        }
+
     private:
         std::vector<D> m_Data;
         std::unordered_map<K, uint64> m_KeyIndexMap;

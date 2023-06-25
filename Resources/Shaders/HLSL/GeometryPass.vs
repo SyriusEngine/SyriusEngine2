@@ -8,9 +8,13 @@ cbuffer CameraData: register(b1){
     float4 cameraPos;
 }
 
-cbuffer ModelData: register(b2){
+struct TransformationData{
     matrix<float, 4, 4> modelMatrix;
     matrix<float, 4, 4> normalMatrix;
+};
+
+cbuffer ModelData: register(b2){
+    TransformationData transform[300];
 }
 
 struct VS_OUT{
@@ -21,12 +25,12 @@ struct VS_OUT{
     matrix<float, 3, 3> TBN: TBNMatrix;
 };
 
-VS_OUT main(float3 pos: Position, float3 normal: Normal, float3 tangent: Tangent, float2 texCoords: TexCoords){
-    float4 worldPos = mul(modelMatrix, float4(pos, 1.0));
+VS_OUT main(float3 pos: Position, float3 normal: Normal, float3 tangent: Tangent, float2 texCoords: TexCoords, uint instanceID: SV_InstanceID){
+    float4 worldPos = mul(transform[instanceID].modelMatrix, float4(pos, 1.0));
     float4 viewPos = mul(view, worldPos);
     float4 projPos = mul(perspective, viewPos);
 
-    matrix<float, 3, 3> truncNormalMatrix = (float3x3)normalMatrix;
+    matrix<float, 3, 3> truncNormalMatrix = (float3x3)transform[instanceID].normalMatrix;
     float3 T = normalize(mul(truncNormalMatrix, tangent));
     float3 B = normalize(cross(normal, T));
     float3 N = normalize(mul(truncNormalMatrix, normal));
