@@ -44,6 +44,8 @@ namespace Syrius {
 
         InstanceID createNewInstance(const MeshDesc& meshDesc);
 
+        InstanceID createNewInstanceFromOther(InstanceID otherInstance);
+
         void setTransformation(InstanceID instanceId, const glm::mat4& modelMatrix);
 
         void removeInstance(InstanceID instanceId);

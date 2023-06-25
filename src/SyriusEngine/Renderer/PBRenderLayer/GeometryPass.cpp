@@ -1,5 +1,6 @@
 #include "GeometryPass.hpp"
 
+
 namespace Syrius{
 
     ResourceView<FrameBufferDescription> createGeometryPassFramebufferDesc(ResourceView<Context>& context){
@@ -134,13 +135,30 @@ namespace Syrius{
         return iid;
     }
 
-    void GeometryPass::setTransformation(InstanceID mid, const glm::mat4 &modelMatrix) {
-        auto& handle = m_Meshes[m_Instances[mid]]; // get the mesh handle
-        handle.transformations[mid].modelMatrix = modelMatrix;
-        handle.transformations[mid].normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+    InstanceID GeometryPass::createNewInstanceFromOther(InstanceID otherInstance) {
+        SR_PRECONDITION(m_Instances.find(otherInstance) != m_Instances.end(), SR_MESSAGE_RENDERER, "Instance %d does not exist", otherInstance);
+
+        MeshID mid = m_Instances[otherInstance];
+        auto& handle = m_Meshes[mid];
+
+        InstanceID iid = generateID();
+        m_Instances[iid] = mid;
+        handle.transformations.insert(iid, MeshTransformation());
+
+        return iid;
+    }
+
+    void GeometryPass::setTransformation(InstanceID instanceId, const glm::mat4 &modelMatrix) {
+        SR_PRECONDITION(m_Instances.find(instanceId) != m_Instances.end(), SR_MESSAGE_RENDERER, "Instance %d does not exist", instanceId);
+
+        auto& handle = m_Meshes[m_Instances[instanceId]]; // get the mesh handle
+        handle.transformations[instanceId].modelMatrix = modelMatrix;
+        handle.transformations[instanceId].normalMatrix = glm::transpose(glm::inverse(modelMatrix));
     }
 
     void GeometryPass::removeInstance(InstanceID instanceId) {
+        SR_PRECONDITION(m_Instances.find(instanceId) != m_Instances.end(), SR_MESSAGE_RENDERER, "Instance %d does not exist", instanceId);
+
         MeshID mid = m_Instances[instanceId]; // get the mesh id, we need to modify the mesh
         m_Instances.erase(instanceId); // remove the instance
 
@@ -159,6 +177,8 @@ namespace Syrius{
     }
 
     void GeometryPass::instanceSetMaterial(InstanceID instanceId, MaterialID materialID) {
+        SR_PRECONDITION(m_Instances.find(instanceId) != m_Instances.end(), SR_MESSAGE_RENDERER, "Instance %d does not exist", instanceId);
+
         auto& handle = m_Meshes[m_Instances[instanceId]];
         handle.materialID = materialID;
     }
@@ -171,4 +191,5 @@ namespace Syrius{
         }
         m_Materials.remove(materialID);
     }
+
 }

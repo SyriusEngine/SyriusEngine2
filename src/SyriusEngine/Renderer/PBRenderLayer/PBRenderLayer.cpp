@@ -86,6 +86,14 @@ namespace Syrius{
         return instanceId;
     }
 
+    InstanceID PBRenderLayer::createNewInstanceFromOther(InstanceID otherInstance) {
+        InstanceID instanceId = 0;
+        m_RenderThread.pushTaskSync([&otherInstance, &instanceId, this]{
+            instanceId = m_GeometryPass->createNewInstanceFromOther(otherInstance);
+        });
+        return instanceId;
+    }
+
     void PBRenderLayer::setTransformation(InstanceID instanceId, const glm::mat4& modelMatrix) {
         m_RenderThread.pushTask([instanceId, modelMatrix, this]{
             m_GeometryPass->setTransformation(instanceId, modelMatrix);
@@ -137,4 +145,5 @@ namespace Syrius{
             m_LightDataPass->removeLight(lightID);
         });
     }
+
 }

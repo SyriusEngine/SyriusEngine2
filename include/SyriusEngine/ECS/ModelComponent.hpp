@@ -26,23 +26,27 @@ namespace Syrius{
 
         RCP<ModelComponent>& addSubMesh(const MeshDesc& desc);
 
-        RCP<ModelComponent> addCube();
+        RCP<ModelComponent>& addSubMesh(InstanceID otherInstance);
 
-        RCP<ModelComponent> addQuad();
+        RCP<ModelComponent>& addCube();
 
-        RCP<ModelComponent> addTriangle();
+        RCP<ModelComponent>& addQuad();
 
-        RCP<ModelComponent> addPyramid();
+        RCP<ModelComponent>& addTriangle();
 
-        RCP<ModelComponent> addCone(uint32 rings);
+        RCP<ModelComponent>& addPyramid();
 
-        RCP<ModelComponent> addSphere(uint32 rings, uint32 sectors);
+        RCP<ModelComponent>& addCone(uint32 rings);
 
-        RCP<ModelComponent> addTorus(uint32 rings, uint32 sectors);
+        RCP<ModelComponent>& addSphere(uint32 rings, uint32 sectors);
+
+        RCP<ModelComponent>& addTorus(uint32 rings, uint32 sectors);
 
         virtual void setTransformation(const glm::mat4& transformation);
 
         virtual void setMaterial(MaterialID materialID);
+
+        virtual InstanceID getInstanceID() const;
 
     protected:
 
@@ -55,6 +59,7 @@ namespace Syrius{
          void propagateTransformation(const glm::mat4& transformation);
 
     private:
+
         glm::vec3 m_Translate;
         glm::vec3 m_Rotate;
         glm::vec3 m_Scale;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../../include/SyriusEngine/Renderer/Primitives.hpp"
-#include "../../../../include/SyriusEngine/ECS/ModelComponent.hpp"
+#include "../Renderer/Primitives.hpp"
+#include "ModelComponent.hpp"
 
 namespace Syrius{
 
@@ -9,11 +9,15 @@ namespace Syrius{
     public:
         MeshComponent(const MeshDesc& desc, RCP<PBRenderLayer>& renderLayer);
 
+        MeshComponent(InstanceID otherInstance, RCP<PBRenderLayer>& renderLayer);
+
         ~MeshComponent() override;
 
         void setTransformation(const glm::mat4& transformation) override;
 
         void setMaterial(MaterialID materialID) override;
+
+        InstanceID getInstanceID() const override;
 
     private:
         InstanceID m_InstanceID;

@@ -1,11 +1,17 @@
-#include "MeshComponent.hpp"
+#include "../../../../include/SyriusEngine/ECS/MeshComponent.hpp"
 #include "../../Renderer/PBRenderLayer/PBRenderLayer.hpp"
 
 namespace Syrius{
 
     MeshComponent::MeshComponent(const MeshDesc &desc, RCP<PBRenderLayer> &renderLayer):
-            ModelComponent(renderLayer),
-            m_InstanceID(renderLayer->createNewInstance(desc)){
+    ModelComponent(renderLayer),
+    m_InstanceID(renderLayer->createNewInstance(desc)){
+
+    }
+
+    MeshComponent::MeshComponent(InstanceID otherInstance, RCP<PBRenderLayer> &renderLayer):
+    ModelComponent(renderLayer),
+    m_InstanceID(renderLayer->createNewInstanceFromOther(otherInstance)){
 
     }
 
@@ -22,6 +28,10 @@ namespace Syrius{
     void MeshComponent::setMaterial(MaterialID materialID) {
         m_RenderLayer->instanceSetMaterial(m_InstanceID, materialID);
         ModelComponent::setMaterial(materialID);
+    }
+
+    InstanceID MeshComponent::getInstanceID() const {
+        return m_InstanceID;
     }
 
 }

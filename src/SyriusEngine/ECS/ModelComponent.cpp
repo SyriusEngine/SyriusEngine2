@@ -4,11 +4,11 @@
 namespace Syrius{
 
     ModelComponent::ModelComponent(RCP<PBRenderLayer>& renderLayer):
-            m_RenderLayer(renderLayer),
-            m_Rotate(0.0f, 0.0f, 0.0f),
-            m_Scale(1.0f, 1.0f, 1.0f),
-            m_Translate(0.0f, 0.0f, 0.0f),
-            m_Transformation(glm::mat4(1.0f)){
+    m_RenderLayer(renderLayer),
+    m_Rotate(0.0f, 0.0f, 0.0f),
+    m_Scale(1.0f, 1.0f, 1.0f),
+    m_Translate(0.0f, 0.0f, 0.0f),
+    m_Transformation(glm::mat4(1.0f)){
 
     }
 
@@ -51,37 +51,42 @@ namespace Syrius{
         return m_ChildModels.back();
     }
 
-    RCP<ModelComponent> ModelComponent::addCube() {
+    RCP<ModelComponent> &ModelComponent::addSubMesh(InstanceID otherInstance) {
+        m_ChildModels.emplace_back(createUP<MeshComponent>(otherInstance, m_RenderLayer));
+        return m_ChildModels.back();
+    }
+
+    RCP<ModelComponent>& ModelComponent::addCube() {
         m_ChildModels.emplace_back(createUP<Cube>(m_RenderLayer));
         return m_ChildModels.back();
     }
 
-    RCP<ModelComponent> ModelComponent::addQuad() {
+    RCP<ModelComponent>& ModelComponent::addQuad() {
         m_ChildModels.emplace_back(createUP<Quad>(m_RenderLayer));
         return m_ChildModels.back();
     }
 
-    RCP<ModelComponent> ModelComponent::addTriangle() {
+    RCP<ModelComponent>& ModelComponent::addTriangle() {
         m_ChildModels.emplace_back(createUP<Triangle>(m_RenderLayer));
         return m_ChildModels.back();
     }
 
-    RCP<ModelComponent> ModelComponent::addPyramid() {
+    RCP<ModelComponent>& ModelComponent::addPyramid() {
         m_ChildModels.emplace_back(createUP<Pyramid>(m_RenderLayer));
         return m_ChildModels.back();
     }
 
-    RCP<ModelComponent> ModelComponent::addCone(uint32 rings) {
+    RCP<ModelComponent>& ModelComponent::addCone(uint32 rings) {
         m_ChildModels.emplace_back(createUP<Cone>(m_RenderLayer, rings));
         return m_ChildModels.back();
     }
 
-    RCP<ModelComponent> ModelComponent::addSphere(uint32 rings, uint32 sectors) {
+    RCP<ModelComponent>& ModelComponent::addSphere(uint32 rings, uint32 sectors) {
         m_ChildModels.emplace_back(createUP<Sphere>(m_RenderLayer, rings, sectors));
         return m_ChildModels.back();
     }
 
-    RCP<ModelComponent> ModelComponent::addTorus(uint32 rings, uint32 sectors) {
+    RCP<ModelComponent>& ModelComponent::addTorus(uint32 rings, uint32 sectors) {
         m_ChildModels.emplace_back(createUP<Torus>(m_RenderLayer, rings, sectors));
         return m_ChildModels.back();
     }
@@ -110,6 +115,10 @@ namespace Syrius{
         for (const auto& child: m_ChildModels){
             child->setMaterial(materialID);
         }
+    }
+
+    InstanceID ModelComponent::getInstanceID() const {
+        return 0;
     }
 
 }

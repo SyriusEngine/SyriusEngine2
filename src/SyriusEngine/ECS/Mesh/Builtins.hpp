@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MeshComponent.hpp"
+#include "../../../../include/SyriusEngine/ECS/MeshComponent.hpp"
 
 namespace Syrius{
 

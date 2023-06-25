@@ -113,6 +113,10 @@ void ApplicationLayer::onAttachSphere() {
     auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
     sphere->setMaterial(ChippedPaintMetalID);
     sphere->setTranslate({0.0f, 0.0f, 3.0f});
+
+    auto sphereInstanceId = sphere->getInstanceID();
+    auto instSphere = sphere->addSubMesh(sphereInstanceId);
+    instSphere->setTranslate({0.0f, 3.0f, 3.0f});
 }
 
 void ApplicationLayer::onAttachBackpackGuitar() {
