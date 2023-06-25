@@ -74,27 +74,27 @@ namespace Syrius{
         return m_LightPass->getFrameBuffer();
     }
 
-    MeshID PBRenderLayer::createMesh(const MeshDesc &desc) {
-        MeshID meshID = 0;
+    InstanceID PBRenderLayer::createNewInstance(const MeshDesc &desc) {
+        InstanceID instanceId = 0;
         /*
          * Desc can be taken in via reference because the caller thread will be blocked until the mesh is created.
          * The desc object will not go out of scope.
          */
-        m_RenderThread.pushTaskSync([&desc, &meshID, this]{
-            meshID = m_GeometryPass->createMesh(desc);
+        m_RenderThread.pushTaskSync([&desc, &instanceId, this]{
+            instanceId = m_GeometryPass->createNewInstance(desc);
         });
-        return meshID;
+        return instanceId;
     }
 
-    void PBRenderLayer::setMeshTransformation(MeshID meshID, const glm::mat4& modelMatrix) {
-        m_RenderThread.pushTask([meshID, modelMatrix, this]{
-            m_GeometryPass->setMeshTransformation(meshID, modelMatrix);
+    void PBRenderLayer::setTransformation(InstanceID instanceId, const glm::mat4& modelMatrix) {
+        m_RenderThread.pushTask([instanceId, modelMatrix, this]{
+            m_GeometryPass->setTransformation(instanceId, modelMatrix);
         });
     }
 
-    void PBRenderLayer::removeMesh(MeshID meshID) {
-        m_RenderThread.pushTask([meshID, this]{
-            m_GeometryPass->removeMesh(meshID);
+    void PBRenderLayer::removeInstance(InstanceID instanceId) {
+        m_RenderThread.pushTask([instanceId, this]{
+            m_GeometryPass->removeInstance(instanceId);
         });
     }
 
@@ -112,9 +112,9 @@ namespace Syrius{
         return materialID;
     }
 
-    void PBRenderLayer::meshSetMaterial(MeshID meshID, MaterialID materialID) {
-        m_RenderThread.pushTaskSync([meshID, materialID, this]{
-            m_GeometryPass->meshSetMaterial(meshID, materialID);
+    void PBRenderLayer::instanceSetMaterial(InstanceID instanceId, MaterialID materialID) {
+        m_RenderThread.pushTaskSync([instanceId, materialID, this]{
+            m_GeometryPass->instanceSetMaterial(instanceId, materialID);
         });
     }
 

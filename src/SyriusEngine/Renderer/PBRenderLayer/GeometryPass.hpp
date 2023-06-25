@@ -13,7 +13,7 @@ namespace Syrius {
         ResourceView<VertexBuffer> vertexBuffer;
         ResourceView<IndexBuffer> indexBuffer;
         ResourceView<VertexArray> vertexArray;
-        MeshTransformation transformation[300];
+        KeyVector<InstanceID, MeshTransformation> transformations;
         MaterialID materialID = 0;
     };
 
@@ -42,21 +42,22 @@ namespace Syrius {
 
         void execute() override;
 
-        MeshID createMesh(const MeshDesc& meshDesc);
+        InstanceID createNewInstance(const MeshDesc& meshDesc);
 
-        void setMeshTransformation(MeshID mid, const glm::mat4& modelMatrix);
+        void setTransformation(InstanceID instanceId, const glm::mat4& modelMatrix);
 
-        void removeMesh(MeshID mid);
+        void removeInstance(InstanceID instanceId);
 
         MaterialID createMaterial(const MaterialDesc& matDesc);
 
-        void meshSetMaterial(MeshID meshID, MaterialID materialID);
+        void instanceSetMaterial(InstanceID instanceId, MaterialID materialID);
 
         void removeMaterial(MaterialID materialID);
 
     private:
         KeyVector<MeshID, MeshHandle> m_Meshes;
         KeyVector<MaterialID, MaterialHandle> m_Materials;
+        std::unordered_map<InstanceID, MeshID> m_Instances; // used to access actual mesh information from instanceID
 
         ResourceView<ShaderModule> m_VertexShaderModule;
         ResourceView<ConstantBuffer> m_ModelData;

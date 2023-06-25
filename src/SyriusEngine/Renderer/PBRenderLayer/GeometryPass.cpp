@@ -90,15 +90,16 @@ namespace Syrius{
 
         m_ModelData->bind();
         m_Shader->bind();
-        for (const auto& data: m_Meshes){
-            m_ModelData->setData(&data.transformation);
-            m_Materials[data.materialID].bind();
-            m_Context->drawInstanced(data.vertexArray, 1);
+        for (const auto& mesh: m_Meshes){
+            m_ModelData->setData(mesh.transformations.getData().data());
+            m_Materials[mesh.materialID].bind();
+            m_Context->drawInstanced(mesh.vertexArray, mesh.transformations.getSize());
         }
         m_Context->endRenderPass(m_FrameBuffer);
     }
 
-    MeshID GeometryPass::createMesh(const MeshDesc &meshDesc) {
+    InstanceID GeometryPass::createNewInstance(const MeshDesc &meshDesc) {
+        // create mesh information
         MeshHandle handle;
 
         VertexBufferDesc vbDesc;
@@ -123,18 +124,32 @@ namespace Syrius{
 
         handle.materialID = meshDesc.materialID;
         MeshID mid = generateID();
+
+        // create Instance
+        InstanceID iid = generateID();
+        m_Instances[iid] = mid;
+        handle.transformations.insert(iid, MeshTransformation());
+
         m_Meshes.insert(mid, handle);
-        return mid;
+        return iid;
     }
 
-    void GeometryPass::setMeshTransformation(MeshID mid, const glm::mat4 &modelMatrix) {
-        auto& handle = m_Meshes[mid];
-        handle.transformation[0].modelMatrix = modelMatrix;
-        handle.transformation[0].normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+    void GeometryPass::setTransformation(InstanceID mid, const glm::mat4 &modelMatrix) {
+        auto& handle = m_Meshes[m_Instances[mid]]; // get the mesh handle
+        handle.transformations[mid].modelMatrix = modelMatrix;
+        handle.transformations[mid].normalMatrix = glm::transpose(glm::inverse(modelMatrix));
     }
 
-    void GeometryPass::removeMesh(MeshID mid) {
-        m_Meshes.remove(mid);
+    void GeometryPass::removeInstance(InstanceID instanceId) {
+        MeshID mid = m_Instances[instanceId]; // get the mesh id, we need to modify the mesh
+        m_Instances.erase(instanceId); // remove the instance
+
+        auto& handle = m_Meshes[mid]; // get the mesh handle
+        handle.transformations.remove(instanceId); // remove the transformation
+
+        if (handle.transformations.getSize() == 0){ // if there are no more instances using the mesh, remove the mesh
+            m_Meshes.remove(mid);
+        }
     }
 
     MaterialID GeometryPass::createMaterial(const MaterialDesc &matDesc) {
@@ -143,8 +158,8 @@ namespace Syrius{
         return materialID;
     }
 
-    void GeometryPass::meshSetMaterial(MeshID meshID, MaterialID materialID) {
-        auto& handle = m_Meshes[meshID];
+    void GeometryPass::instanceSetMaterial(InstanceID instanceId, MaterialID materialID) {
+        auto& handle = m_Meshes[m_Instances[instanceId]];
         handle.materialID = materialID;
     }
 

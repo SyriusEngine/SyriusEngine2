@@ -16,7 +16,7 @@ namespace Syrius{
         void setMaterial(MaterialID materialID) override;
 
     private:
-        MeshID m_MeshID;
+        InstanceID m_InstanceID;
 
     };
 

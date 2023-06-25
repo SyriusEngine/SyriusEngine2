@@ -28,17 +28,17 @@ namespace Syrius{
 
         ResourceView<FrameBuffer>& onRender(ResourceView<FrameBuffer>& framebuffer) override;
 
-        MeshID createMesh(const MeshDesc& desc);
+        InstanceID createNewInstance(const MeshDesc& desc);
 
-        void setMeshTransformation(MeshID meshID, const glm::mat4& modelMatrix);
+        void setTransformation(InstanceID instanceId, const glm::mat4& modelMatrix);
 
-        void removeMesh(MeshID meshID);
+        void removeInstance(InstanceID instanceId);
 
         void setCameraData(const glm::mat4& view, const glm::vec3& cameraPosition);
 
         MaterialID createMaterial(const MaterialDesc& matDesc);
 
-        void meshSetMaterial(MeshID meshID, MaterialID materialID);
+        void instanceSetMaterial(InstanceID instanceId, MaterialID materialID);
 
         void removeMaterial(MaterialID materialID);
 

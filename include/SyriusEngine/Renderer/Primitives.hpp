@@ -9,7 +9,7 @@ namespace Syrius{
     typedef UID MeshID;
     typedef UID LightID;
     typedef UID MaterialID;
-    typedef UID Entry;
+    typedef UID InstanceID;
 
     class PBRenderLayer;
 
