@@ -20,7 +20,7 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    onAttachSphere();
+    onAttachPbrInstancedSpheres();
     //onAttachBackpackGuitar();
     //onAttachPbrSpheres();
 
@@ -167,6 +167,48 @@ void ApplicationLayer::onAttachPbrSpheres() {
             MaterialID id = m_Engine->createMaterial(desc);
             sphere->setMaterial(id);
             sphere->setTranslate({x * 2, y * 2, 3.0f});
+        }
+    }
+
+}
+
+void ApplicationLayer::onAttachPbrInstancedSpheres() {
+    MaterialDesc ChippedPaintMetalDesc(
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_basecolor.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_normal.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_metallic.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_roughness.png",
+            "./Resources/Textures/ChippedPaintMetal/Chipped-paint-metal_ao.png"
+    );
+    MaterialID ChippedPaintMetalID = m_Engine->createMaterial(ChippedPaintMetalDesc);
+
+    m_Model = m_Engine->createEntity();
+    m_Engine->addModelComponent(m_Model);
+    auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
+    sphere->setMaterial(ChippedPaintMetalID);
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+    sphere->setTranslate({x, y, z});
+    auto sphereInstanceId = sphere->getInstanceID();
+
+    int numSpheres = 50;
+    float cubeSize = 3.0f;
+    float spacing = 0.5f;
+    int spheresPerCubeSide = 1;
+    for (int i = 0; i < numSpheres; ++i) {
+        float cubeHalfSize = (cubeSize * spheresPerCubeSide) / 2.0f;
+        float sphereSpacing = cubeSize + spacing;
+        int currentCubeIndex = i / (spheresPerCubeSide * spheresPerCubeSide);
+
+        float xPos = (i % spheresPerCubeSide) * sphereSpacing;
+        float yPos = ((i / spheresPerCubeSide) % spheresPerCubeSide) * sphereSpacing;
+        float zPos = currentCubeIndex * sphereSpacing;
+
+        sphere->addSubMesh(sphereInstanceId)->setTranslate({ xPos - cubeHalfSize, yPos - cubeHalfSize, zPos - cubeHalfSize });
+
+        if (i == spheresPerCubeSide * spheresPerCubeSide - 1) {
+            spheresPerCubeSide++;
         }
     }
 

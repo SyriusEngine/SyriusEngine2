@@ -28,6 +28,8 @@ private:
 
     void onAttachPbrSpheres();
 
+    void onAttachPbrInstancedSpheres();
+
 private:
 
     UP<SyriusEngine>& m_Engine;

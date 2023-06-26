@@ -92,9 +92,11 @@ namespace Syrius{
         m_ModelData->bind();
         m_Shader->bind();
         for (const auto& mesh: m_Meshes){
-            MeshTransformation trans[300];
-            trans[0] = mesh.transformations.getData()[0];
-            trans[1] = mesh.transformations.getData()[1];
+            auto ptr = mesh.transformations.getData();
+            MeshTransformation trans[MAX_INSTANCES];
+            for (uint32 i = 0; i < MAX_INSTANCES; i++){
+                trans[i] = ptr[i];
+            }
 
             m_ModelData->setData(trans);
             m_Materials[mesh.materialID].bind();

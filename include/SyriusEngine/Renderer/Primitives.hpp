@@ -11,7 +11,7 @@ namespace Syrius{
     typedef UID MaterialID;
     typedef UID InstanceID;
 
-    const uint64 MAX_INSTANCES = 300;
+    const uint64 MAX_INSTANCES = 100;
 
     class PBRenderLayer;
 

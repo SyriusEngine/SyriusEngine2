@@ -14,7 +14,7 @@ struct TransformationData{
 };
 
 cbuffer ModelData: register(b2){
-    TransformationData transform[300];
+    TransformationData transform[100];
 }
 
 struct VS_OUT{
