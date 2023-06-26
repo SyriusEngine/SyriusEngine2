@@ -11,6 +11,8 @@ namespace Syrius{
     typedef UID MaterialID;
     typedef UID InstanceID;
 
+    const uint64 MAX_INSTANCES = 300;
+
     class PBRenderLayer;
 
     static glm::vec2 s_ScreenVertices[] = {

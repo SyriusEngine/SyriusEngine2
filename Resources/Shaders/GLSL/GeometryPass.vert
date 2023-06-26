@@ -22,14 +22,18 @@ layout(std140, binding = 1) uniform CameraData {
     vec4 cameraPos;
 };
 
-layout(std140, binding = 2) uniform ModelData {
+struct TransformationData{
     mat4 modelMatrix;
     mat4 normalMatrix;
 };
 
+layout(std140, binding = 2) uniform ModelData {
+    TransformationData transform[300];
+};
+
 void main(){
-    mat3 truncNormalMatrix = mat3(normalMatrix);
-    vec3 fragPos = vec3(modelMatrix * vec4(lPosition, 1.0));
+    mat3 truncNormalMatrix = mat3(transform[gl_InstanceID].modelMatrix);
+    vec3 fragPos = vec3(transform[gl_InstanceID].modelMatrix * vec4(lPosition, 1.0));
 
     vec3 N = normalize(truncNormalMatrix * lNormal);
     vec3 T = normalize(truncNormalMatrix * lTangent);

@@ -70,11 +70,11 @@ namespace Syrius{
 
         ConstantBufferDesc cbDesc;
         cbDesc.name = "ModelData";
-        cbDesc.size = sizeof(MeshTransformation);
+        cbDesc.size = sizeof(MeshTransformation) * MAX_INSTANCES;
         cbDesc.slot = 2;
         cbDesc.type = SR_BUFFER_DYNAMIC;
         cbDesc.shaderStage = SR_SHADER_VERTEX;
-        MeshTransformation defaultData;
+        MeshTransformation defaultData[MAX_INSTANCES];
         cbDesc.data = &defaultData;
         m_ModelData = m_Context->createConstantBuffer(cbDesc);
 
@@ -92,7 +92,11 @@ namespace Syrius{
         m_ModelData->bind();
         m_Shader->bind();
         for (const auto& mesh: m_Meshes){
-            m_ModelData->setData(mesh.transformations.getData().data());
+            MeshTransformation trans[300];
+            trans[0] = mesh.transformations.getData()[0];
+            trans[1] = mesh.transformations.getData()[1];
+
+            m_ModelData->setData(trans);
             m_Materials[mesh.materialID].bind();
             m_Context->drawInstanced(mesh.vertexArray, mesh.transformations.getSize());
         }
@@ -137,6 +141,7 @@ namespace Syrius{
 
     InstanceID GeometryPass::createNewInstanceFromOther(InstanceID otherInstance) {
         SR_PRECONDITION(m_Instances.find(otherInstance) != m_Instances.end(), SR_MESSAGE_RENDERER, "Instance %d does not exist", otherInstance);
+        SR_PRECONDITION(m_Meshes[m_Instances[otherInstance]].transformations.getSize() < MAX_INSTANCES, SR_MESSAGE_RENDERER, "Cannot create more instances than %d for instance %d", MAX_INSTANCES, otherInstance);
 
         MeshID mid = m_Instances[otherInstance];
         auto& handle = m_Meshes[mid];

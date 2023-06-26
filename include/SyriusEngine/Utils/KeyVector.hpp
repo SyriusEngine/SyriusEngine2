@@ -11,6 +11,10 @@ namespace Syrius{
 
         KeyVector() = default;
 
+        explicit KeyVector(uint32 size){
+            m_Data.reserve(size);
+        }
+
         ~KeyVector() = default;
 
         void insert(const K& key, const D& data){
