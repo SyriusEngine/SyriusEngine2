@@ -37,6 +37,7 @@ private:
     double m_DeltaTime;
     double m_LastFrameTime;
 
+
     EntityID m_Player;
     EntityID m_Model;
     std::vector<EntityID> m_Models;

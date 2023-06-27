@@ -45,6 +45,8 @@ namespace Syrius{
 
         void addLightComponent(EntityID eid, const LightDesc& lightDesc) override;
 
+        [[nodiscard]] LightComponent& getLightComponent(EntityID eid) override;
+
         void removeLightComponent(EntityID eid) override;
 
     private:

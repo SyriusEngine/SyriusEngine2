@@ -55,6 +55,8 @@ namespace Syrius{
 
         virtual void addLightComponent(EntityID eid, const LightDesc& lightDesc) = 0;
 
+        [[nodiscard]] virtual LightComponent& getLightComponent(EntityID eid) = 0;
+
         virtual void removeLightComponent(EntityID eid) = 0;
 
         EntityID createEntity();

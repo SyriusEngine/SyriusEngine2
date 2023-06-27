@@ -20,7 +20,7 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    onAttachPbrInstancedSpheres();
+    onAttachSphere();
     //onAttachBackpackGuitar();
     //onAttachPbrSpheres();
 
@@ -92,9 +92,17 @@ bool ApplicationLayer::onEvent(const Event &event) {
 }
 
 ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> &framebuffer) {
+    framebuffer->bind();
     m_Engine->getInternalWindow()->onImGuiBegin();
 
+    ImGui::Begin("DeBug");
+
+    ImGui::Text("FPS: %f", 1000.0f / m_DeltaTime);
+
+    ImGui::End();
+
     m_Engine->getInternalWindow()->onImGuiEnd();
+    framebuffer->unbind();
     return framebuffer;
 }
 
@@ -112,17 +120,13 @@ void ApplicationLayer::onAttachSphere() {
     m_Engine->addModelComponent(m_Model);
     auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
     sphere->setMaterial(ChippedPaintMetalID);
-    sphere->setTranslate({0.0f, 0.0f, 3.0f});
 
-    auto sphereInstanceId = sphere->getInstanceID();
-    auto instSphere = sphere->addSubMesh(sphereInstanceId);
-    instSphere->setTranslate({0.0f, 3.0f, 3.0f});
 }
 
 void ApplicationLayer::onAttachBackpackGuitar() {
     m_Model = m_Engine->createEntity();
-    //m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
-    m_Engine->addModelComponent(m_Model, "./Resources/Models/Cerberus/Cerberus_LP.fbx");
+    m_Engine->addModelComponent(m_Model, "./Resources/Models/Survival_Backpack_2/Survival_BackPack_2.fbx");
+    //m_Engine->addModelComponent(m_Model, "./Resources/Models/Cerberus/Cerberus_LP.fbx");
     m_Engine->getModelComponent(m_Model).setRotate({0.0f, 0.0f, 0.0f});
     m_Engine->getModelComponent(m_Model).setScale({0.1f, 0.1f, 0.1f});
 
@@ -139,36 +143,6 @@ void ApplicationLayer::onAttachBackpackGuitar() {
 }
 
 void ApplicationLayer::onAttachPbrSpheres() {
-    uint8 maxX = 7;
-    uint8 maxY = 7;
-
-    m_Model = m_Engine->createEntity();
-    m_Engine->addModelComponent(m_Model);
-
-    for (uint8 x = 0; x < maxX; x++) {
-        for (uint8 y = 0; y < maxY; y++) {
-            auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
-
-            ubyte semiRed[4] = {255, 0, 0, 255};
-            auto albedo = createImage(semiRed, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
-            ubyte normalVec[4] = {128, 128, 255, 255};
-            auto normal = createImage(normalVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
-            ubyte metallicVec[4] = {static_cast<ubyte>(x / maxX), static_cast<ubyte>(x / maxX),
-                                    static_cast<ubyte>(x / maxX), 255};
-            auto metallic = createImage(metallicVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
-            ubyte roughnessVec[4] = {static_cast<ubyte>(y / maxY), static_cast<ubyte>(y / maxY),
-                                     static_cast<ubyte>(y / maxY), 255};
-            auto roughness = createImage(roughnessVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
-            ubyte aoVec[4] = {255, 255, 255, 255};
-            auto ao = createImage(aoVec, 1, 1, Syrius::SR_TEXTURE_RGBA_UI8);
-
-            MaterialDesc desc(std::move(albedo), std::move(normal), std::move(metallic), std::move(roughness),
-                              std::move(ao));
-            MaterialID id = m_Engine->createMaterial(desc);
-            sphere->setMaterial(id);
-            sphere->setTranslate({x * 2, y * 2, 3.0f});
-        }
-    }
 
 }
 

@@ -102,8 +102,13 @@ namespace Syrius{
         m_ECS->addComponent<LightComponent>(eid, lightDesc, m_Renderer->getPBRenderLayer());
     }
 
+    LightComponent &SyriusEngineImpl::getLightComponent(EntityID eid) {
+        return m_ECS->getComponent<LightComponent>(eid);
+    }
+
     void SyriusEngineImpl::removeLightComponent(EntityID eid) {
         m_ECS->removeComponent<LightComponent>(eid);
     }
+
 
 }
