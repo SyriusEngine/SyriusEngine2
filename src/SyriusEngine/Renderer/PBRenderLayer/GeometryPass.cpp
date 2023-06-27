@@ -92,75 +92,40 @@ namespace Syrius{
         m_ModelData->bind();
         m_Shader->bind();
         for (const auto& mesh: m_Meshes){
-            auto ptr = mesh.transformations.getData();
-            MeshTransformation trans[MAX_INSTANCES];
-            for (uint32 i = 0; i < MAX_INSTANCES; i++){
-                trans[i] = ptr[i];
-            }
-
-            m_ModelData->setData(trans);
+            const auto& transformations = mesh.getTransformations();
+            m_ModelData->setData(transformations.data());
             m_Materials[mesh.materialID].bind();
-            m_Context->drawInstanced(mesh.vertexArray, mesh.transformations.getSize());
+            m_Context->drawInstanced(mesh.getVertexArray(), mesh.getInstanceCount());
         }
         m_Context->endRenderPass(m_FrameBuffer);
     }
 
+
     InstanceID GeometryPass::createNewInstance(const MeshDesc &meshDesc) {
         // create mesh information
-        MeshHandle handle;
-
-        VertexBufferDesc vbDesc;
-        vbDesc.data = meshDesc.vertices.data();
-        vbDesc.count = meshDesc.vertices.size();
-        vbDesc.layout = m_VertexDescription;
-        vbDesc.type = SR_BUFFER_STATIC;
-        handle.vertexBuffer = m_Context->createVertexBuffer(vbDesc);
-
-        IndexBufferDesc ibDesc;
-        ibDesc.data = meshDesc.indices.data();
-        ibDesc.count = meshDesc.indices.size();
-        ibDesc.type = SR_BUFFER_STATIC;
-        ibDesc.dataType = SR_UINT32;
-        handle.indexBuffer = m_Context->createIndexBuffer(ibDesc);
-
-        VertexArrayDesc vaDesc;
-        vaDesc.vertexBuffer = handle.vertexBuffer;
-        vaDesc.indexBuffer = handle.indexBuffer;
-        vaDesc.vertexShader = m_VertexShaderModule;
-        handle.vertexArray = m_Context->createVertexArray(vaDesc);
-
-        handle.materialID = meshDesc.materialID;
         MeshID mid = generateID();
+        m_Meshes.emplace(mid, m_Context, meshDesc, m_VertexShaderModule, m_VertexDescription);
 
         // create Instance
-        InstanceID iid = generateID();
-        m_Instances[iid] = mid;
-        handle.transformations.insert(iid, MeshTransformation());
-
-        m_Meshes.insert(mid, handle);
+        InstanceID iid =  m_Meshes[mid].createNewInstance();
+        m_Instances.emplace(iid, mid);
         return iid;
     }
 
     InstanceID GeometryPass::createNewInstanceFromOther(InstanceID otherInstance) {
         SR_PRECONDITION(m_Instances.find(otherInstance) != m_Instances.end(), SR_MESSAGE_RENDERER, "Instance %d does not exist", otherInstance);
-        SR_PRECONDITION(m_Meshes[m_Instances[otherInstance]].transformations.getSize() < MAX_INSTANCES, SR_MESSAGE_RENDERER, "Cannot create more instances than %d for instance %d", MAX_INSTANCES, otherInstance);
 
         MeshID mid = m_Instances[otherInstance];
-        auto& handle = m_Meshes[mid];
 
-        InstanceID iid = generateID();
-        m_Instances[iid] = mid;
-        handle.transformations.insert(iid, MeshTransformation());
-
+        InstanceID iid =  m_Meshes[mid].createNewInstance();
+        m_Instances.emplace(iid, mid);
         return iid;
     }
 
     void GeometryPass::setTransformation(InstanceID instanceId, const glm::mat4 &modelMatrix) {
         SR_PRECONDITION(m_Instances.find(instanceId) != m_Instances.end(), SR_MESSAGE_RENDERER, "Instance %d does not exist", instanceId);
 
-        auto& handle = m_Meshes[m_Instances[instanceId]]; // get the mesh handle
-        handle.transformations[instanceId].modelMatrix = modelMatrix;
-        handle.transformations[instanceId].normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+        m_Meshes[m_Instances[instanceId]].setTransformation(instanceId, modelMatrix);
     }
 
     void GeometryPass::removeInstance(InstanceID instanceId) {
@@ -170,9 +135,9 @@ namespace Syrius{
         m_Instances.erase(instanceId); // remove the instance
 
         auto& handle = m_Meshes[mid]; // get the mesh handle
-        handle.transformations.remove(instanceId); // remove the transformation
+        handle.removeInstance(instanceId); // remove the instance from the mesh
 
-        if (handle.transformations.getSize() == 0){ // if there are no more instances using the mesh, remove the mesh
+        if (handle.getInstanceCount() == 0){ // if there are no more instances using the mesh, remove the mesh
             m_Meshes.remove(mid);
         }
     }

@@ -186,13 +186,14 @@ void ApplicationLayer::onAttachPbrInstancedSpheres() {
     m_Engine->addModelComponent(m_Model);
     auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
     sphere->setMaterial(ChippedPaintMetalID);
+    auto sphereInstanceId = sphere->getInstanceID();
+    printf("Sphere instance id: %d\n", sphereInstanceId);
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;
     sphere->setTranslate({x, y, z});
-    auto sphereInstanceId = sphere->getInstanceID();
 
-    int numSpheres = 50;
+    int numSpheres = 99;
     float cubeSize = 3.0f;
     float spacing = 0.5f;
     int spheresPerCubeSide = 1;

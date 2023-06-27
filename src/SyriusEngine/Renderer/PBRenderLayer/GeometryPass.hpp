@@ -1,21 +1,9 @@
 #pragma once
 
 #include "RenderPass.hpp"
+#include "MeshHandle.hpp"
 
 namespace Syrius {
-
-    struct MeshTransformation {
-        glm::mat4 modelMatrix = glm::mat4(1.0f);
-        glm::mat4 normalMatrix = glm::mat4(1.0f);
-    };
-
-    struct MeshHandle {
-        ResourceView<VertexBuffer> vertexBuffer;
-        ResourceView<IndexBuffer> indexBuffer;
-        ResourceView<VertexArray> vertexArray;
-        KeyVector<InstanceID, MeshTransformation> transformations = KeyVector<InstanceID, MeshTransformation>(MAX_INSTANCES);
-        MaterialID materialID = 0;
-    };
 
     class MaterialHandle{
     public:
