@@ -111,5 +111,4 @@ namespace Syrius{
         m_ECS->removeComponent<LightComponent>(eid);
     }
 
-
 }

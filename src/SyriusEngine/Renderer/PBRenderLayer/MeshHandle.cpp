@@ -1,18 +1,18 @@
 #include "MeshHandle.hpp"
-#include <csignal>
 
 namespace Syrius{
 
     MeshTransformation::MeshTransformation():
-    modelMatrix(glm::mat4(1.0f)),
-    normalMatrix(glm::mat4(1.0f)){
+            modelMatrix(glm::mat4(1.0f)),
+            normalMatrix(glm::mat4(1.0f)){
 
     }
 
     MeshHandle::MeshHandle(ResourceView<Context>& context, const MeshDesc& meshDesc, ResourceView<ShaderModule>& vertexShader, ResourceView<VertexDescription>& vertexDesc):
     materialID(meshDesc.materialID),
-    m_Transformations(MAX_INSTANCES),
-    m_CurrentInstanceCount(0){
+    m_Transformations(){
+        m_Transformations.reserve(MAX_INSTANCES);
+
         VertexBufferDesc vbDesc;
         vbDesc.data = meshDesc.vertices.data();
         vbDesc.count = meshDesc.vertices.size();
@@ -40,13 +40,11 @@ namespace Syrius{
     }
 
     InstanceID MeshHandle::createNewInstance() {
-        SR_PRECONDITION(m_CurrentInstanceCount < MAX_INSTANCES, SR_MESSAGE_RENDERER, "Cannot create more instances than %d", MAX_INSTANCES);
+        SR_PRECONDITION(m_Transformations.size() < MAX_INSTANCES, SR_MESSAGE_RENDERER, "Cannot create more instances than %d", MAX_INSTANCES);
 
         InstanceID iid = generateID();
         m_Transformations.emplace_back();
         m_InstanceToIndex.insert({iid, m_Transformations.size() - 1});
-        m_CurrentInstanceCount++;
-
         return iid;
     }
 
@@ -75,6 +73,6 @@ namespace Syrius{
         // update index
         m_InstanceToIndex[lastElementKey] = currentDataIndex;
 
-        m_CurrentInstanceCount--;
+
     }
 }
