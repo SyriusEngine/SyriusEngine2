@@ -24,6 +24,14 @@ namespace Syrius{
             return eid;
         }
 
+        void removeEntity(EntityID eid){
+            std::lock_guard<std::mutex> lock(m_Mutex);
+
+            SR_PRECONDITION(m_Entities.find(eid) != m_Entities.end(), SR_MESSAGE_ECS, "Entity: %ul does not exists", eid);
+
+            m_Entities.erase(eid);
+        }
+
         template<typename C, typename... Args>
         void addComponent(EntityID eid, Args&&... args){
             SR_PRECONDITION(m_Entities.find(eid) != m_Entities.end(), SR_MESSAGE_ECS, "Entity: %ul does not exists", eid);

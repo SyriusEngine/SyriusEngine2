@@ -15,6 +15,10 @@ namespace Syrius{
         return m_ECS->createEntity();
     }
 
+    void SyriusEngine::destroyEntity(EntityID eid){
+        m_ECS->removeEntity(eid);
+    }
+
     ResourceView<SyriusWindow> SyriusEngine::getInternalWindow() {
         return m_Window.createView();
     }

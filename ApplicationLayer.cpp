@@ -164,7 +164,6 @@ void ApplicationLayer::onAttachPbrInstancedSpheres() {
     auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
     sphere->setMaterial(ChippedPaintMetalID);
     auto sphereInstanceId = sphere->getInstanceID();
-    printf("Sphere instance id: %d\n", sphereInstanceId);
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;
@@ -229,6 +228,16 @@ void ApplicationLayer::drawLightPanel() {
         }
         if (ImGui::DragFloat3("Color", color, 0.1f)){
             lightComp.setColor({color[0], color[1], color[2]});
+        }
+
+        if (ImGui::Button("Delete Light")){
+            auto id = selected;
+            selected = 0;
+            m_CreatorThread.pushTask([this, id]{
+                m_Engine->removeLightComponent(id);
+                m_Lights.erase(std::remove(m_Lights.begin(), m_Lights.end(), id), m_Lights.end());
+                m_Engine->destroyEntity(id);
+            });
         }
 
     }

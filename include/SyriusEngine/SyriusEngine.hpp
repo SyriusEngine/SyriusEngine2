@@ -64,6 +64,8 @@ namespace Syrius{
 
         EntityID createEntity();
 
+        void destroyEntity(EntityID eid);
+
         ResourceView<SyriusWindow> getInternalWindow();
 
     protected:
