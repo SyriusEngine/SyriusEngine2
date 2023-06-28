@@ -18,7 +18,7 @@ void runEngine(SR_SUPPORTED_API api, uint32 width, uint32 height, int32 x, int32
 int main() {
     init();
     try{
-        runEngine(Syrius::SR_API_D3D11, 1280, 720, 100, 100);
+        runEngine(Syrius::SR_API_OPENGL, 1280, 720, 100, 100);
 
 
     } catch (std::exception& e) {

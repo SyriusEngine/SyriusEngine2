@@ -21,9 +21,8 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    onAttachSphere();
-    //onAttachBackpackGuitar();
-    //onAttachPbrSpheres();
+    //onAttachSphere();
+    onAttachPbrInstancedSpheres();
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
@@ -171,7 +170,7 @@ void ApplicationLayer::onAttachPbrInstancedSpheres() {
     float z = 0.0f;
     sphere->setTranslate({x, y, z});
 
-    int numSpheres = 99;
+    int numSpheres = 50;
     float cubeSize = 3.0f;
     float spacing = 0.5f;
     int spheresPerCubeSide = 1;

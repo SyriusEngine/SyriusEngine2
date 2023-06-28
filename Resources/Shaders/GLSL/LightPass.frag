@@ -49,14 +49,18 @@ vec3 fresnelSchlick(float cosTheta, vec3 f0){
 }
 
 void main(){
-    vec3 position = texture(positions, res.texCoords).xyz;
-    vec3 normal = texture(normals, res.texCoords).rgb;
-    vec3 albedoTexel = texture(albedo, res.texCoords).rgb;
-
     vec4 mraoTexel = texture(mrao, res.texCoords);
+    if (mraoTexel.a < 0.1){
+        discard;
+    }
+
     float metallic = mraoTexel.r;
     float roughness = mraoTexel.g;
     float ao = mraoTexel.b;
+
+    vec3 position = texture(positions, res.texCoords).xyz;
+    vec3 normal = texture(normals, res.texCoords).rgb;
+    vec3 albedoTexel = texture(albedo, res.texCoords).rgb;
 
     vec3 viewDir = normalize(res.cameraPos - position);
 

@@ -54,17 +54,23 @@ float3 fresnelSchlick(float cosTheta, float3 f0)
 }
 
 PS_OUT main(VS_OUT vsOut) {
-    PS_OUT psOut;
     float2 texCoord = vsOut.texCoords;
     texCoord.y = 1.0 - texCoord.y;
+
+    float4 mraoTexel = mrao.Sample(splr, texCoord);
+    if (mraoTexel.a < 0.1f) { // if the a channel is lower than 1.0f, discard the pixel as this contains garbage data
+            discard;
+    }
+
+    float metallic = mraoTexel.r;
+    float roughness = mraoTexel.g;
+    float ao = mraoTexel.b;
+
     float3 position = positions.Sample(splr, texCoord).xyz;
     float3 normal = normals.Sample(splr, texCoord).rgb;
     float3 albedoTexel = albedo.Sample(splr, texCoord).rgb;
 
-    float3 mraoTexel = mrao.Sample(splr, texCoord).rgb;
-    float metallic = mraoTexel.r;
-    float roughness = mraoTexel.g;
-    float ao = mraoTexel.b;
+    PS_OUT psOut;
 
     float3 viewDir = normalize(vsOut.cameraPos - position);
 

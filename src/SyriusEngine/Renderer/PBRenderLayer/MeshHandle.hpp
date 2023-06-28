@@ -25,9 +25,13 @@ namespace Syrius{
 
         inline const ResourceView<VertexArray>& getVertexArray() const { return m_VertexArray; }
 
-        inline const std::vector<MeshTransformation>& getTransformations() const { return m_Transformations; }
+        inline const std::vector<MeshTransformation>& getTransformations() const {
+            return m_Transformations;
+        }
 
-        inline uint64 getInstanceCount() const { return m_CurrentInstanceCount; }
+        inline uint64 getInstanceCount() const {
+            return m_CurrentInstanceCount;
+        }
 
     public:
         MaterialID materialID;

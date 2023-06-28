@@ -9,6 +9,10 @@ namespace Syrius{
         vpDesc.height = context->getHeight();
 
         ColorAttachmentDesc f32Attachment;
+        f32Attachment.clearColor[0] = 0.0f;
+        f32Attachment.clearColor[1] = 0.0f;
+        f32Attachment.clearColor[2] = 0.0f;
+        f32Attachment.clearColor[3] = 0.0f;
         f32Attachment.width = vpDesc.width;
         f32Attachment.height = vpDesc.height;
         f32Attachment.format = SR_TEXTURE_RGBA_F32;
