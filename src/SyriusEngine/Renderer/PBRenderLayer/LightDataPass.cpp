@@ -41,6 +41,8 @@ namespace Syrius{
     }
 
     void LightDataPass::removeLight(LightID index) {
+        SR_PRECONDITION(m_KeyLightMap.find(index) != m_KeyLightMap.end(), SR_MESSAGE_RENDERER, "LightID: %d does not exist", index);
+
         auto lastIndex = m_LightCount - 1;
         for (const auto& pair: m_KeyLightMap){
             if (lastIndex == pair.second){
@@ -52,5 +54,23 @@ namespace Syrius{
                 m_LightData.m_Color[lastIndex] = glm::vec4(0.0f);
             }
         }
+
+        m_LightData.m_LightCount[0]--;
+        m_Resource->setData(&m_LightData);
+
+    }
+
+    void LightDataPass::setLightPosition(LightID index, const glm::vec3 &position) {
+        SR_PRECONDITION(m_KeyLightMap.find(index) != m_KeyLightMap.end(), SR_MESSAGE_RENDERER, "LightID: %d does not exist", index);
+
+        m_LightData.m_Position[m_KeyLightMap[index]] = glm::vec4(position, 1.0f);
+        m_Resource->setData(&m_LightData);
+    }
+
+    void LightDataPass::setLightColor(LightID index, const glm::vec3 &color) {
+        SR_PRECONDITION(m_KeyLightMap.find(index) != m_KeyLightMap.end(), SR_MESSAGE_RENDERER, "LightID: %d does not exist", index);
+
+        m_LightData.m_Color[m_KeyLightMap[index]] = glm::vec4(color, 1.0f);
+        m_Resource->setData(&m_LightData);
     }
 }

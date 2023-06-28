@@ -18,11 +18,12 @@ namespace Syrius{
 
     void LightComponent::setPosition(const glm::vec3 &position) {
         m_Position = position;
-        printf("CHANGE LIGHTPOS NOT IMPLEMENTED YET");
+        m_RenderLayer->setLightPosition(m_LightID, position);
     }
 
     void LightComponent::setColor(const glm::vec3 &color) {
         m_Color = color;
+        m_RenderLayer->setLightColor(m_LightID, color);
     }
 
     const glm::vec3 &LightComponent::getPosition() const {
@@ -32,4 +33,5 @@ namespace Syrius{
     const glm::vec3 &LightComponent::getColor() const {
         return m_Color;
     }
+
 }

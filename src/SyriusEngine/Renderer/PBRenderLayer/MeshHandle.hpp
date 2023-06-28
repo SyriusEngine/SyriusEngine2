@@ -27,12 +27,13 @@ namespace Syrius{
 
         inline const std::vector<MeshTransformation>& getTransformations() const { return m_Transformations; }
 
-        inline uint64 getInstanceCount() const { return m_Transformations.size(); }
+        inline uint64 getInstanceCount() const { return m_CurrentInstanceCount; }
 
     public:
         MaterialID materialID;
 
     private:
+        Size m_CurrentInstanceCount;
         ResourceView<VertexBuffer> m_VertexBuffer;
         ResourceView<IndexBuffer> m_IndexBuffer;
         ResourceView<VertexArray> m_VertexArray;

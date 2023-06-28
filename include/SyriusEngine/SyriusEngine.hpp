@@ -11,6 +11,9 @@
 #include "ECS/ModelComponent.hpp"
 #include "ECS/LightComponent.hpp"
 
+#include "Utils/Worker.hpp"
+#include "Utils/Vector.hpp"
+
 namespace Syrius{
 
     struct SR_API SyriusEngineDesc{

@@ -8,69 +8,68 @@
 
 namespace Syrius{
 
-    class Worker{
-            public:
-            Worker();
+    class SR_API Worker{
+    public:
+        Worker();
 
-            ~Worker();
+        ~Worker();
 
-            void start();
+        void start();
 
-            void stop();
+        void stop();
 
-            template<typename... Args>
-            void pushTask(Args&&... args) {
-                SR_PRECONDITION(m_Running, SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "Worker is not running");
-                SR_PRECONDITION(m_Thread.get_id() != std::this_thread::get_id(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "Cannot push task from worker thread");
+        template<typename... Args>
+        void pushTask(Args&&... args) {
+            SR_PRECONDITION(m_Running, SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "Worker is not running");
 
-                {
-                    std::lock_guard<std::mutex> lk(m_Mutex);
-                    m_Queue.push_back(std::bind(std::forward<Args>(args)...));
-                }
-
-                m_Condition.notify_all();
+            {
+                std::lock_guard<std::mutex> lk(m_Mutex);
+                m_Queue.push_back(std::bind(std::forward<Args>(args)...));
             }
 
-            template<typename... Args>
-            void pushTaskSync(Args&&... args) {
-                SR_PRECONDITION(m_Running, SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "Worker is not running");
-                SR_PRECONDITION(m_Thread.get_id() != std::this_thread::get_id(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "Cannot push task from worker thread");
+            m_Condition.notify_all();
+        }
 
-                bool isTaskFinished = false;
+        template<typename... Args>
+        void pushTaskSync(Args&&... args) {
+            SR_PRECONDITION(m_Running, SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "Worker is not running");
+            SR_PRECONDITION(m_Thread.get_id() != std::this_thread::get_id(), SR_MESSAGE_SOURCE::SR_MESSAGE_GENERAL, "Cannot push synchronized task from worker thread to itself");
 
-                {
-                    std::lock_guard<std::mutex> lk(m_Mutex);
-                    m_Queue.push_back([func = std::bind(std::forward<Args>(args)...), &isTaskFinished]() {
-                        func();
-                        isTaskFinished = true;
-                    });
-                }
+            bool isTaskFinished = false;
 
-                m_Condition.notify_all();
-
-                while (!isTaskFinished) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                }
+            {
+                std::lock_guard<std::mutex> lk(m_Mutex);
+                m_Queue.push_back([func = std::bind(std::forward<Args>(args)...), &isTaskFinished]() {
+                    func();
+                    isTaskFinished = true;
+                });
             }
 
-            [[nodiscard]] bool isRunning() const;
+            m_Condition.notify_all();
 
-            [[nodiscard]] bool hasTasks() const;
+            while (!isTaskFinished) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            }
+        }
 
-            [[nodiscard]] Size getTaskCount() const;
+        [[nodiscard]] bool isRunning() const;
 
-            [[nodiscard]] std::thread::id getThreadId() const;
+        [[nodiscard]] bool hasTasks() const;
 
-            private:
+        [[nodiscard]] Size getTaskCount() const;
 
-            void privateStart();
+        [[nodiscard]] std::thread::id getThreadId() const;
 
-            private:
-            std::condition_variable m_Condition;
-            std::list<std::function<void()>> m_Queue;
-            std::mutex m_Mutex;
-            std::thread m_Thread;
-            bool m_Running = false;
+    private:
+
+        void privateStart();
+
+    private:
+        std::condition_variable m_Condition;
+        std::list<std::function<void()>> m_Queue;
+        std::mutex m_Mutex;
+        std::thread m_Thread;
+        bool m_Running = false;
     };
 
 }

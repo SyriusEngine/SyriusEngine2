@@ -5,8 +5,9 @@ RenderLayer(engine->getRenderContext()),
 m_Engine(engine),
 m_Player(0),
 m_DeltaTime(1.0f),
-m_LastFrameTime(0.0f){
-
+m_LastFrameTime(0.0f),
+m_CreatorThread(){
+    m_CreatorThread.start();
 }
 
 ApplicationLayer::~ApplicationLayer() {
@@ -29,6 +30,7 @@ void ApplicationLayer::onAttach() {
     l1Desc.position = {0.0f, 8.0f, 1.0f};
     l1Desc.color = {255.0f, 255.0f, 255.0f};
     m_Engine->addLightComponent(light1, l1Desc);
+    m_Lights.push_back(light1);
 
 }
 
@@ -100,6 +102,8 @@ ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> 
     ImGui::Text("FPS: %f", 1000.0f / m_DeltaTime);
 
     ImGui::End();
+
+    drawLightPanel();
 
     m_Engine->getInternalWindow()->onImGuiEnd();
     framebuffer->unbind();
@@ -187,4 +191,48 @@ void ApplicationLayer::onAttachPbrInstancedSpheres() {
         }
     }
 
+}
+
+void ApplicationLayer::drawLightPanel() {
+    ImGui::Begin("Light Panel");
+
+    if (ImGui::Button("Create Light")){
+        m_CreatorThread.pushTask([this]{
+            auto light1 = m_Engine->createEntity();
+            LightDesc l1Desc;
+            l1Desc.position = {0.0f, 0.0f, 0.0f};
+            l1Desc.color = {255.0f, 255.0f, 255.0f};
+            m_Engine->addLightComponent(light1, l1Desc);
+            m_Lights.push_back(light1);
+        });
+    }
+
+    static EntityID selected = 0;
+    if (ImGui::BeginListBox("Light IDs")){
+        for (auto& light : m_Lights){
+            const bool isSelected = (selected == light);
+            if (ImGui::Selectable(std::to_string(light).c_str(), isSelected)){
+                selected = light;
+            }
+            if (isSelected){
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndListBox();
+    }
+
+    if (selected != 0){
+        auto& lightComp = m_Engine->getLightComponent(selected);
+        float position[3] = {lightComp.getPosition().x, lightComp.getPosition().y, lightComp.getPosition().z};
+        float color[3] = {lightComp.getColor().x, lightComp.getColor().y, lightComp.getColor().z};
+        if (ImGui::DragFloat3("Position", position, 0.1f)){
+            lightComp.setPosition({position[0], position[1], position[2]});
+        }
+        if (ImGui::DragFloat3("Color", color, 0.1f)){
+            lightComp.setColor({color[0], color[1], color[2]});
+        }
+
+    }
+
+    ImGui::End();
 }

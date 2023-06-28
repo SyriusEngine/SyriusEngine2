@@ -48,6 +48,10 @@ namespace Syrius{
 
         void removeLight(LightID lightID);
 
+        void setLightPosition(LightID lightID, const glm::vec3& position);
+
+        void setLightColor(LightID lightID, const glm::vec3& color);
+
     private:
 
         RenderGraph m_RenderGraph;

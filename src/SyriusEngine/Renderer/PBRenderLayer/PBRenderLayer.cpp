@@ -146,4 +146,16 @@ namespace Syrius{
         });
     }
 
+    void PBRenderLayer::setLightPosition(LightID lightID, const glm::vec3 &position) {
+        m_RenderThread.pushTask([lightID, position, this]{ // dont need to sync because the light data pass is thread safe, but dont take position by reference
+            m_LightDataPass->setLightPosition(lightID, position);
+        });
+    }
+
+    void PBRenderLayer::setLightColor(LightID lightID, const glm::vec3 &color) {
+        m_RenderThread.pushTask([lightID, color, this]{ // same reason
+            m_LightDataPass->setLightColor(lightID, color);
+        });
+    }
+
 }

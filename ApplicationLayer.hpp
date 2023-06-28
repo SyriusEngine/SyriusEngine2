@@ -2,6 +2,7 @@
 
 #include "include/SyriusEngine/SyriusEngine.hpp"
 
+
 using namespace Syrius;
 
 class ApplicationLayer: public RenderLayer{
@@ -30,7 +31,10 @@ private:
 
     void onAttachPbrInstancedSpheres();
 
+    void drawLightPanel();
+
 private:
+    Worker m_CreatorThread;
 
     UP<SyriusEngine>& m_Engine;
 
@@ -40,6 +44,7 @@ private:
 
     EntityID m_Player;
     EntityID m_Model;
+    std::vector<EntityID> m_Lights;
     std::vector<EntityID> m_Models;
     bool m_UseCamera = false;
 };

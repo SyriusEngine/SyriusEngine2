@@ -20,6 +20,10 @@ namespace Syrius{
 
         void removeLight(LightID index);
 
+        void setLightPosition(LightID index, const glm::vec3& position);
+
+        void setLightColor(LightID index, const glm::vec3& color);
+
     private:
         LightData m_LightData;
         std::unordered_map<LightID, Index> m_KeyLightMap;

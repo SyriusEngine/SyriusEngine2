@@ -7,7 +7,7 @@ namespace Syrius{
     m_Window(window),
     m_Worker(){
         m_Worker.start();
-        m_Worker.pushTaskSync([rendererDesc, this]{ // do NOT take rendererDesc in via reference!!
+        m_Worker.pushTaskSync([&rendererDesc, this]{
 
             ContextDesc contextDesc;
             contextDesc.api = rendererDesc.api;
