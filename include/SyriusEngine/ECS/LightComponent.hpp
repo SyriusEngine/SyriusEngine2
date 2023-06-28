@@ -10,6 +10,8 @@ namespace Syrius{
 
         ~LightComponent();
 
+        void destroy();
+
         void setPosition(const glm::vec3& position);
 
         void setColor(const glm::vec3& color);

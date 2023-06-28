@@ -2,6 +2,7 @@
 
 #include "../Include.hpp"
 #include "../Debug.hpp"
+#include "../Utils/Vector.hpp"
 #include <typeindex>
 
 namespace Syrius{

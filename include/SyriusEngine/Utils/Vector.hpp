@@ -173,6 +173,9 @@ namespace Syrius{
             m_Count = 0;
         }
 
+        [[nodiscard]] Size getCount() const{
+            return m_Count;
+        }
 
     private:
 

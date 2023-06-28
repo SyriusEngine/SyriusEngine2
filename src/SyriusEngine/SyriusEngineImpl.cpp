@@ -107,6 +107,7 @@ namespace Syrius{
     }
 
     void SyriusEngineImpl::removeLightComponent(EntityID eid) {
+        m_ECS->getComponent<LightComponent>(eid).destroy(); // TODO: This is a hack, fix it
         m_ECS->removeComponent<LightComponent>(eid);
     }
 
