@@ -87,6 +87,7 @@ namespace Syrius{
     }
 
     void SyriusEngineImpl::removeModelComponent(EntityID eid) {
+        m_ECS->getComponent<ModelComponent>(eid).destroy(); // TODO: This is a hack, fix it
         m_ECS->removeComponent<ModelComponent>(eid);
     }
 

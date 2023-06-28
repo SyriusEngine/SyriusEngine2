@@ -16,8 +16,9 @@ namespace Syrius{
     }
 
     MeshComponent::~MeshComponent() {
-        m_RenderLayer->removeInstance(m_InstanceID);
-        m_InstanceID = 0;
+        printf("MeshComponent destructor not implemented correctly\n");
+//        m_RenderLayer->removeInstance(m_InstanceID);
+//        m_InstanceID = 0;
     }
 
     void MeshComponent::setTransformation(const glm::mat4 &transformation) {
@@ -32,6 +33,12 @@ namespace Syrius{
 
     InstanceID MeshComponent::getInstanceID() const {
         return m_InstanceID;
+    }
+
+    void MeshComponent::destroy() {
+        m_RenderLayer->removeInstance(m_InstanceID);
+        m_InstanceID = 0;
+        ModelComponent::destroy();
     }
 
 }

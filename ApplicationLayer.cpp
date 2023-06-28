@@ -21,8 +21,8 @@ void ApplicationLayer::onAttach() {
     m_Player = m_Engine->createEntity();
     m_Engine->addCameraComponent(m_Player, 0.2f, .01f);
 
-    //onAttachSphere();
-    onAttachPbrInstancedSpheres();
+    onAttachSphere();
+    //onAttachPbrInstancedSpheres();
 
     auto light1 = m_Engine->createEntity();
     LightDesc l1Desc;
@@ -103,6 +103,7 @@ ResourceView<FrameBuffer> &ApplicationLayer::onRender(ResourceView<FrameBuffer> 
     ImGui::End();
 
     drawLightPanel();
+    drawModelPanel();
 
     m_Engine->getInternalWindow()->onImGuiEnd();
     framebuffer->unbind();
@@ -123,6 +124,7 @@ void ApplicationLayer::onAttachSphere() {
     m_Engine->addModelComponent(m_Model);
     auto sphere = m_Engine->getModelComponent(m_Model).addSphere(32, 32);
     sphere->setMaterial(ChippedPaintMetalID);
+    m_SphereInstance = sphere->getInstanceID();
 
 }
 
@@ -182,7 +184,11 @@ void ApplicationLayer::onAttachPbrInstancedSpheres() {
         float yPos = ((i / spheresPerCubeSide) % spheresPerCubeSide) * sphereSpacing;
         float zPos = currentCubeIndex * sphereSpacing;
 
-        sphere->addSubMesh(sphereInstanceId)->setTranslate({ xPos - cubeHalfSize, yPos - cubeHalfSize, zPos - cubeHalfSize });
+        auto sphereEntity = m_Engine->createEntity();
+        m_Engine->addModelComponent(sphereEntity);
+        auto sphere = m_Engine->getModelComponent(sphereEntity);
+
+        sphere.addSubMesh(sphereInstanceId)->setTranslate({ xPos - cubeHalfSize, yPos - cubeHalfSize, zPos - cubeHalfSize });
 
         if (i == spheresPerCubeSide * spheresPerCubeSide - 1) {
             spheresPerCubeSide++;
@@ -237,6 +243,53 @@ void ApplicationLayer::drawLightPanel() {
                 m_Engine->removeLightComponent(id);
                 m_Lights.erase(std::remove(m_Lights.begin(), m_Lights.end(), id), m_Lights.end());
                 m_Engine->destroyEntity(id);
+            });
+        }
+
+    }
+
+    ImGui::End();
+}
+
+void ApplicationLayer::drawModelPanel() {
+    ImGui::Begin("Model Panel");
+
+    if (ImGui::Button("Create Model")){
+        m_CreatorThread.pushTask([this]{
+            auto model1 = m_Engine->createEntity();
+            m_Engine->addModelComponent(model1);
+            auto m = m_Engine->getModelComponent(model1).addSubMesh(m_SphereInstance);
+            m_Models.push_back(model1);
+        });
+    }
+
+    static EntityID selected = 0;
+    if (ImGui::BeginListBox("Entity IDs")){
+        for (auto& model : m_Models){
+            const bool isSelected = (selected == model);
+            if (ImGui::Selectable(std::to_string(model).c_str(), isSelected)){
+                selected = model;
+            }
+            if (isSelected){
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndListBox();
+    }
+
+    if (selected != 0){
+        auto& modelComp = m_Engine->getModelComponent(selected);
+        float position[3] = {modelComp.getTranslate().x, modelComp.getTranslate().y, modelComp.getTranslate().z};
+        if (ImGui::DragFloat3("Position", position, 0.1f)){
+            modelComp.setTranslate({position[0], position[1], position[2]});
+        }
+
+
+        if (ImGui::Button("Delete Model")){
+            auto id = selected;
+            selected = 0;
+            m_CreatorThread.pushTask([this, id]{
+                m_Engine->removeModelComponent(id);
             });
         }
 

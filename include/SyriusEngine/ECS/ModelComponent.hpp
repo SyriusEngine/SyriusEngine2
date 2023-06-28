@@ -48,6 +48,8 @@ namespace Syrius{
 
         virtual InstanceID getInstanceID() const;
 
+        virtual void destroy();
+
     protected:
 
         RCP<PBRenderLayer>& m_RenderLayer;

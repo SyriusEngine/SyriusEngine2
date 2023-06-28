@@ -19,6 +19,8 @@ namespace Syrius{
 
         InstanceID getInstanceID() const override;
 
+        void destroy() override;
+
     private:
         InstanceID m_InstanceID;
 

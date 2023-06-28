@@ -33,6 +33,8 @@ private:
 
     void drawLightPanel();
 
+    void drawModelPanel();
+
 private:
     Worker m_CreatorThread;
 
@@ -47,4 +49,5 @@ private:
     std::vector<EntityID> m_Lights;
     std::vector<EntityID> m_Models;
     bool m_UseCamera = false;
+    InstanceID m_SphereInstance;
 };

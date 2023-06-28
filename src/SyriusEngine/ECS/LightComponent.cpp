@@ -14,6 +14,8 @@ namespace Syrius{
     LightComponent::~LightComponent() {
         // really fucking stupid but vector resizing also calls destructors. We do not want a lightcomponent to remove
         // the reference inside the renderer just because some vector decided to resize.
+
+        printf("LightComponent destructor not implemented correctly\n");
     }
 
     void LightComponent::destroy() {

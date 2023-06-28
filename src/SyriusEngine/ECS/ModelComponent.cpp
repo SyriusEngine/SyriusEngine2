@@ -121,4 +121,10 @@ namespace Syrius{
         return 0;
     }
 
+    void ModelComponent::destroy() {
+        for (const auto& child: m_ChildModels){
+            child->destroy();
+        }
+    }
+
 }
